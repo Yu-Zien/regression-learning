@@ -1,0 +1,141 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="application-version" content="0.1.0"><title>修正一般协方差下的 OLS 性质 · 回归分析 · 从直觉到推导</title><style>:root { color-scheme:light; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; color:#26342f; background:#f6f7f3; }
+* { box-sizing:border-box; } body { margin:0; font-size:17px; line-height:1.9; }
+.sheet { width:min(900px,calc(100% - 32px)); margin:30px auto; padding:32px 48px 42px; background:#fff; border:1px solid #e0e5dc; border-radius:12px; }
+nav { display:flex; flex-wrap:wrap; gap:12px 22px; padding-bottom:16px; border-bottom:1px solid #e1e6df; font-size:14px; }
+h1 { font-size:1.8rem; line-height:1.45; margin:27px 0 20px; } h2 { font-size:1.3rem; margin:36px 0 16px; } h3 { font-size:1.1rem; }
+p,ul,ol,table { margin:15px 0; } li+li { margin-top:7px; } a { color:#246a50; text-underline-offset:3px; }
+blockquote { margin:22px 0; padding:5px 20px; background:#f1f6f0; border-left:3px solid #7c9f77; }
+details { border:1px solid #d8e0d4; border-radius:8px; margin:16px 0 24px; padding:0 18px; background:#fcfdfb; } summary { cursor:pointer; padding:13px 0; color:#315b41; font-weight:600; } details[open] { padding-bottom:12px; }
+table { border-collapse:collapse; width:100%; font-size:.96em; display:block; overflow-x:auto; } th,td { border:1px solid #dce3d8; padding:10px 13px; text-align:left; vertical-align:top; } th { background:#f2f5ef; }
+math { font-family:math; font-size:1.04em; } .math-display { overflow-x:auto; padding:8px 2px; margin:20px 0; } .math-display math { margin:0 auto; }
+code { overflow-wrap:anywhere; } pre { overflow:auto; } img,svg { max-width:100%; height:auto; } .source-label,footer { color:#66736b; font-size:14px; } footer { margin-top:36px; padding-top:15px; border-top:1px solid #e1e6df; }
+@media(max-width:620px) { body { font-size:16px; } .sheet { width:calc(100% - 16px); margin:8px auto; padding:20px 18px 28px; } h1 { font-size:1.5rem; } th,td { padding:8px; } }
+</style><link rel="stylesheet" href="runtime/app.css"></head><body><main class="sheet"><header class="brand-bar"><span class="brand-mark" aria-hidden="true">β</span><span class="brand-name">回归分析学习室</span><span class="brand-sub">LEARN · REASON · PRACTICE</span></header><nav aria-label="课程导航"><a href="index.html">继续学习</a><a href="index.html?view=exercises">材料习题</a><a href="index.html?view=progress">目录与进度</a></nav><p id="save-status" role="status"></p><div id="runtime-error" class="runtime-error" role="alert" hidden></div><div id="app-view"><article id="lesson-content" data-module-id="C2M121"><h1 id="修正一般协方差下的-ols-性质">修正一般协方差下的 OLS 性质</h1>
+<p>来源：Chapter 2: Classical Linear Regression Models，PDF 第 40
+页，定理 2.18（含编辑纠错）。目标：推导一般 V 下的 OLS
+方差和系数—残差协方差，识别原文错误。</p>
+<h2 id="method">定义、条件与方法</h2>
+<p>误差非球形并不改变 OLS
+的计算公式。本步区分哪些性质保留、哪些必须修改；此处还需修正讲义一条实质错误。</p>
+<p><strong>定理 2.18 的有效结论。</strong> 在 A.1、A.3、A.5* 下，记
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">Q=(X&#39;X)^{-1}</annotation></semantics></math></span>、<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><msub><mi>I</mi><mi>n</mi></msub><mo>−</mo><mi>X</mi><mi>Q</mi><msup><mi>X</mi><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">M=I_n-XQX&#39;</annotation></semantics></math></span>，仍有
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>β</mi><mo>=</mo><mi>Q</mi><msup><mi>X</mi><mo>′</mo></msup><mi>ε</mi><mo>,</mo><mspace width="2.0em"></mspace><mover><mi>ε</mi><mo accent="true">̂</mo></mover><mo>=</mo><mi>M</mi><mi>ε</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\widehat\beta-\beta=QX&#39;\varepsilon,\qquad
+\widehat\varepsilon=M\varepsilon.
+</annotation></semantics></math></div> 因此
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>β</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">
+E(\widehat\beta\mid X)=\beta,
+</annotation></semantics></math></div>
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Var</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mi>Q</mi><msup><mi>X</mi><mo>′</mo></msup><mi>V</mi><mi>X</mi><mi>Q</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">
+\operatorname{Var}(\widehat\beta\mid X)
+=\sigma^2QX&#39;VXQ,
+</annotation></semantics></math></div> 并且
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>β</mi><mo>∣</mo><mi>X</mi></mrow><annotation encoding="application/x-tex">\widehat\beta-\beta\mid X</annotation></semantics></math></span>
+服从均值为零、协方差如上的正态分布。证明直接把一般协方差
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mi>V</mi></mrow><annotation encoding="application/x-tex">\sigma^2V</annotation></semantics></math></span>
+放入线性变换公式即可；无偏性只用零条件均值。</p>
+<p><strong>编辑纠错：原第 4 项一般不成立。</strong> PDF 第 40 页定理
+2.18(4) 印为
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Cov</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>,</mo><mover><mi>ε</mi><mo accent="true">̂</mo></mover><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\operatorname{Cov}(\widehat\beta,\widehat\varepsilon\mid X)=0.
+</annotation></semantics></math></div>
+已回看原页确认这是原文内容，并非文字提取错误。正确的一般式是
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><menclose notation="box"><mrow><mrow><mi mathvariant="normal">Cov</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>,</mo><mover><mi>ε</mi><mo accent="true">̂</mo></mover><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mi>Q</mi><msup><mi>X</mi><mo>′</mo></msup><mi>V</mi><mi>M</mi><mi>.</mi></mrow></menclose><annotation encoding="application/x-tex">
+\boxed{\operatorname{Cov}(\widehat\beta,\widehat\varepsilon\mid X)
+=\sigma^2QX&#39;VM.}
+</annotation></semantics></math></div> 因为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Cov</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>Q</mi><msup><mi>X</mi><mo>′</mo></msup><mi>ε</mi><mo>,</mo><mi>M</mi><mi>ε</mi><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>Q</mi><msup><mi>X</mi><mo>′</mo></msup><mo stretchy="false" form="prefix">(</mo><msup><mi>σ</mi><mn>2</mn></msup><mi>V</mi><mo stretchy="false" form="postfix">)</mo><msup><mi>M</mi><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">\operatorname{Cov}(QX&#39;\varepsilon,M\varepsilon\mid X)=QX&#39;(\sigma^2V)M&#39;</annotation></semantics></math></span>
+且
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>M</mi><mo>′</mo></msup><mo>=</mo><mi>M</mi></mrow><annotation encoding="application/x-tex">M&#39;=M</annotation></semantics></math></span>。只知道
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mo>′</mo></msup><mi>M</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">X&#39;M=0</annotation></semantics></math></span>
+无法消去夹在中间的
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>V</mi><annotation encoding="application/x-tex">V</annotation></semantics></math></span>。当
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>=</mo><msub><mi>I</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">V=I_n</annotation></semantics></math></span>，或另有
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mo>′</mo></msup><mi>V</mi><mi>M</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">X&#39;VM=0</annotation></semantics></math></span>
+条件时，才退回零。</p>
+<p><strong>反例验证。</strong>
+取两观测的截距模型，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">X=(1,1)&#39;</annotation></semantics></math></span>、<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>=</mo><mrow><mi mathvariant="normal">diag</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>4</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">V=\operatorname{diag}(1,4)</annotation></semantics></math></span>，则
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>,</mo><mspace width="1.0em"></mspace><mi>M</mi><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">
+Q=\frac12,\quad
+M=\frac12\begin{pmatrix}1&amp;-1\\-1&amp;1\end{pmatrix},
+</annotation></semantics></math></div>
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mi>Q</mi><msup><mi>X</mi><mo>′</mo></msup><mi>V</mi><mi>M</mi><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>3</mn><mi>/</mi><mn>4</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>3</mn><mi>/</mi><mn>4</mn><mo stretchy="false" form="postfix">)</mo><mo>≠</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\sigma^2QX&#39;VM
+=\sigma^2(-3/4,\ 3/4)\ne0.
+</annotation></semantics></math></div>
+这还表明系数与残差在该正态模型下并不独立。该模型满足
+A.1、A.3、A.5*，所以直接否定原第 4 项的一般陈述。</p>
+<p><strong>影响。</strong> OLS 仍无偏、仍条件正态，却通常不再
+BLUE。旧公式
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mi>Q</mi></mrow><annotation encoding="application/x-tex">\sigma^2Q</annotation></semantics></math></span>
+一般错误；旧
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>s</mi><mn>2</mn></msup><annotation encoding="application/x-tex">s^2</annotation></semantics></math></span>
+也有
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>s</mi><mn>2</mn></msup><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mfrac><mrow><msup><mi>σ</mi><mn>2</mn></msup><mrow><mi mathvariant="normal">tr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>M</mi><mi>V</mi><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mi>n</mi><mo>−</mo><mi>k</mi></mrow></mfrac><mo>,</mo></mrow><annotation encoding="application/x-tex">
+E(s^2\mid X)=\frac{\sigma^2\operatorname{tr}(MV)}{n-k},
+</annotation></semantics></math></div> 不保证等于
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math></span>。因此不能把经典的标准误、独立性及精确
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mi>/</mi><mi>F</mi></mrow><annotation encoding="application/x-tex">t/F</annotation></semantics></math></span>
+推断原样搬过来。</p>
+<h2 id="example-a">例题 A</h2>
+<p>在上述
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">n=2</annotation></semantics></math></span>
+截距反例中，求 OLS 条件方差与
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>s</mi><mn>2</mn></msup><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">E(s^2\mid X)</annotation></semantics></math></span>，并复算第一个残差与截距估计的协方差。</p>
+<h2 id="answer-a">A 解答</h2>
+<details>
+<summary>
+查看示范解答
+</summary>
+<p>截距估计是
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>Y</mi><mn>1</mn></msub><mo>+</mo><msub><mi>Y</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">(Y_1+Y_2)/2</annotation></semantics></math></span>，所以
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Var</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mfrac><mn>1</mn><mn>4</mn></mfrac><mo stretchy="false" form="prefix">(</mo><msup><mi>σ</mi><mn>2</mn></msup><mo>+</mo><mn>4</mn><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mfrac><mn>5</mn><mn>4</mn></mfrac><msup><mi>σ</mi><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\operatorname{Var}(\widehat\beta_1\mid X)
+=\frac14(\sigma^2+4\sigma^2)=\frac54\sigma^2.
+</annotation></semantics></math></div>
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">tr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>M</mi><mi>V</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><mn>4</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>5</mn><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\operatorname{tr}(MV)=\frac12(1+4)=5/2</annotation></semantics></math></span>，且
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>−</mo><mi>k</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n-k=1</annotation></semantics></math></span>，所以
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>s</mi><mn>2</mn></msup><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mfrac><mn>5</mn><mn>2</mn></mfrac><msup><mi>σ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">E(s^2\mid X)=\frac52\sigma^2</annotation></semantics></math></span>。第一个残差是
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>ε</mi><mn>1</mn></msub><mo>−</mo><msub><mi>ε</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">(\varepsilon_1-\varepsilon_2)/2</annotation></semantics></math></span>，故
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Cov</mi><mo>&#8289;</mo></mrow><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><msub><mi>ε</mi><mn>1</mn></msub><mo>+</mo><msub><mi>ε</mi><mn>2</mn></msub></mrow><mn>2</mn></mfrac><mo>,</mo><mfrac><mrow><msub><mi>ε</mi><mn>1</mn></msub><mo>−</mo><msub><mi>ε</mi><mn>2</mn></msub></mrow><mn>2</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mn>4</mn></mfrac><mo stretchy="false" form="prefix">(</mo><msup><mi>σ</mi><mn>2</mn></msup><mo>−</mo><mn>4</mn><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>−</mi><mfrac><mn>3</mn><mn>4</mn></mfrac><msup><mi>σ</mi><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\operatorname{Cov}\!\left(\frac{\varepsilon_1+\varepsilon_2}{2},
+\frac{\varepsilon_1-\varepsilon_2}{2}\right)
+=\frac14(\sigma^2-4\sigma^2)=-\frac34\sigma^2.
+</annotation></semantics></math></div> 这与矩阵式第一项一致。</p>
+</details>
+<h2 id="practice-b">练习 B</h2><p class="source-label">新增练习 · 练习本课 A 已示范的同一判断、计算或证明动作。</p><p>（补充练习）把反例中的
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>V</mi><annotation encoding="application/x-tex">V</annotation></semantics></math></span>
+换为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">diag</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>9</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\operatorname{diag}(1,9)</annotation></semantics></math></span>，其他条件不变。求
+OLS 方差、其与第一个残差的协方差，说明原文零协方差是否成立。</p><div class="practice-controls" data-question-id="C2B121" data-module-id="C2M121" data-mode="guided" data-answer-anchor="answer-b"></div><h2 id="answer-b">B 解答</h2>
+<details>
+<summary>
+查看参考解
+</summary>
+<p>仍有
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><mo>−</mo><msub><mi>β</mi><mn>1</mn></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>ε</mi><mn>1</mn></msub><mo>+</mo><msub><mi>ε</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\widehat\beta_1-\beta_1=(\varepsilon_1+\varepsilon_2)/2</annotation></semantics></math></span>、<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>ε</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>ε</mi><mn>1</mn></msub><mo>−</mo><msub><mi>ε</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\widehat\varepsilon_1=(\varepsilon_1-\varepsilon_2)/2</annotation></semantics></math></span>。因此
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Var</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mfrac><mrow><mn>1</mn><mo>+</mo><mn>9</mn></mrow><mn>4</mn></mfrac><msup><mi>σ</mi><mn>2</mn></msup><mo>=</mo><mfrac><mn>5</mn><mn>2</mn></mfrac><msup><mi>σ</mi><mn>2</mn></msup><mo>,</mo></mrow><annotation encoding="application/x-tex">
+\operatorname{Var}(\widehat\beta_1\mid X)=\frac{1+9}{4}\sigma^2=\frac52\sigma^2,
+</annotation></semantics></math></div>
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Cov</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><mo>,</mo><msub><mover><mi>ε</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mn>9</mn></mrow><mn>4</mn></mfrac><msup><mi>σ</mi><mn>2</mn></msup><mo>=</mo><mi>−</mi><mn>2</mn><msup><mi>σ</mi><mn>2</mn></msup><mo>≠</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\operatorname{Cov}(\widehat\beta_1,\widehat\varepsilon_1\mid X)
+=\frac{1-9}{4}\sigma^2=-2\sigma^2\ne0.
+</annotation></semantics></math></div>
+原文零协方差再次不成立。差异来自两个观测噪声方差不同，不能用普通几何正交代替按真实协方差计算的概率不相关。</p>
+</details>
+<h2 id="summary">一句小结</h2>
+<p>一般 V 下 OLS
+无偏性保留；方差变为三明治形式，系数—残差协方差一般不为零。</p>
+<details class="prepared-review"><summary>精选回顾（回看不记分）</summary><h2 id="review">精选回顾</h2><p>讲义第 40 页定理 2.18(4) 怎样修正？为什么普通残差正交不够？</p><h2 id="review-answer">回顾答案</h2><details>
+<summary>
+回忆后查看
+</summary>
+<p>正确式为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Cov</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>,</mo><mover><mi>ε</mi><mo accent="true">̂</mo></mover><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi>X</mi><mo>′</mo></msup><mi>V</mi><mi>M</mi></mrow><annotation encoding="application/x-tex">\operatorname{Cov}(\widehat\beta,\widehat\varepsilon\mid X)=\sigma^2(X&#39;X)^{-1}X&#39;VM</annotation></semantics></math></span>。正规方程只保证
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mo>′</mo></msup><mi>M</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">X&#39;M=0</annotation></semantics></math></span>；一般
+V 夹在中间时
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mo>′</mo></msup><mi>V</mi><mi>M</mi></mrow><annotation encoding="application/x-tex">X&#39;VM</annotation></semantics></math></span>
+未必为零。球形特例
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>=</mo><msub><mi>I</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">V=I_n</annotation></semantics></math></span>
+才能直接消掉该项。</p>
+</details></details></article></div><footer>网站版本 0.1.0 · 记录保存在当前浏览器。请固定使用同一地址与浏览器，并定期导出备份。</footer></main><script type="module" src="runtime/app.js"></script></body></html>

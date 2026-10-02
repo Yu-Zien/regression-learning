@@ -1,0 +1,118 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="application-version" content="0.1.0"><title>证明 RSS 形式的 F 检验 · 回归分析 · 从直觉到推导</title><style>:root { color-scheme:light; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; color:#26342f; background:#f6f7f3; }
+* { box-sizing:border-box; } body { margin:0; font-size:17px; line-height:1.9; }
+.sheet { width:min(900px,calc(100% - 32px)); margin:30px auto; padding:32px 48px 42px; background:#fff; border:1px solid #e0e5dc; border-radius:12px; }
+nav { display:flex; flex-wrap:wrap; gap:12px 22px; padding-bottom:16px; border-bottom:1px solid #e1e6df; font-size:14px; }
+h1 { font-size:1.8rem; line-height:1.45; margin:27px 0 20px; } h2 { font-size:1.3rem; margin:36px 0 16px; } h3 { font-size:1.1rem; }
+p,ul,ol,table { margin:15px 0; } li+li { margin-top:7px; } a { color:#246a50; text-underline-offset:3px; }
+blockquote { margin:22px 0; padding:5px 20px; background:#f1f6f0; border-left:3px solid #7c9f77; }
+details { border:1px solid #d8e0d4; border-radius:8px; margin:16px 0 24px; padding:0 18px; background:#fcfdfb; } summary { cursor:pointer; padding:13px 0; color:#315b41; font-weight:600; } details[open] { padding-bottom:12px; }
+table { border-collapse:collapse; width:100%; font-size:.96em; display:block; overflow-x:auto; } th,td { border:1px solid #dce3d8; padding:10px 13px; text-align:left; vertical-align:top; } th { background:#f2f5ef; }
+math { font-family:math; font-size:1.04em; } .math-display { overflow-x:auto; padding:8px 2px; margin:20px 0; } .math-display math { margin:0 auto; }
+code { overflow-wrap:anywhere; } pre { overflow:auto; } img,svg { max-width:100%; height:auto; } .source-label,footer { color:#66736b; font-size:14px; } footer { margin-top:36px; padding-top:15px; border-top:1px solid #e1e6df; }
+@media(max-width:620px) { body { font-size:16px; } .sheet { width:calc(100% - 16px); margin:8px auto; padding:20px 18px 28px; } h1 { font-size:1.5rem; } th,td { padding:8px; } }
+</style><link rel="stylesheet" href="runtime/app.css"></head><body><main class="sheet"><header class="brand-bar"><span class="brand-mark" aria-hidden="true">β</span><span class="brand-name">回归分析学习室</span><span class="brand-sub">LEARN · REASON · PRACTICE</span></header><nav aria-label="课程导航"><a href="index.html">继续学习</a><a href="index.html?view=exercises">材料习题</a><a href="index.html?view=progress">目录与进度</a></nav><p id="save-status" role="status"></p><div id="runtime-error" class="runtime-error" role="alert" hidden></div><div id="app-view"><article id="lesson-content" data-module-id="C2M117"><h1 id="证明-rss-形式的-f-检验">证明 RSS 形式的 F 检验</h1>
+<p>来源：Chapter 2: Classical Linear Regression Models，PDF 第 36
+页，定理 2.15。目标：把两次回归的残差平方和差与矩阵形式 F
+统计量对齐。</p>
+<h2 id="method">定义、条件与方法</h2>
+<p>上一课得到了受约束系数，本步把它代回目标函数。这就把抽象的协方差距离转为两次回归都能计算的
+RSS。</p>
+<p>记
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mi>R</mi><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>r</mi></mrow><annotation encoding="application/x-tex">\delta=R\widehat\beta-r</annotation></semantics></math></span>，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">Q=(X&#39;X)^{-1}</annotation></semantics></math></span>，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo>=</mo><mi>R</mi><mi>Q</mi><msup><mi>R</mi><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">W=RQR&#39;</annotation></semantics></math></span>。受约束位移为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mo>*</mo></msub><mo>=</mo><mi>−</mi><mi>Q</mi><msup><mi>R</mi><mo>′</mo></msup><msup><mi>W</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>δ</mi></mrow><annotation encoding="application/x-tex">d_*=-QR&#39;W^{-1}\delta</annotation></semantics></math></span>。上一课的平方分解给出
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mi>r</mi></msub><mo>−</mo><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mrow><mi>u</mi><mi>r</mi></mrow></msub><mo>=</mo><msubsup><mi>d</mi><mo>*</mo><mo>′</mo></msubsup><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><msub><mi>d</mi><mo>*</mo></msub><mo>=</mo><msup><mi>δ</mi><mo>′</mo></msup><msup><mi>W</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>R</mi><mi>Q</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mi>Q</mi><msup><mi>R</mi><mo>′</mo></msup><msup><mi>W</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>δ</mi><mo>=</mo><msup><mi>δ</mi><mo>′</mo></msup><msup><mi>W</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>δ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\operatorname{RSS}_r-\operatorname{RSS}_{ur}
+=d_*&#39;X&#39;Xd_*
+=\delta&#39;W^{-1}RQ(X&#39;X)QR&#39;W^{-1}\delta
+=\delta&#39;W^{-1}\delta.
+</annotation></semantics></math></div> 最后一步用
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mi>Q</mi><mo>=</mo><mi>Q</mi></mrow><annotation encoding="application/x-tex">Q(X&#39;X)Q=Q</annotation></semantics></math></span>
+和
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>Q</mi><msup><mi>R</mi><mo>′</mo></msup><mo>=</mo><mi>W</mi></mrow><annotation encoding="application/x-tex">RQR&#39;=W</annotation></semantics></math></span>。由于
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>W</mi><annotation encoding="application/x-tex">W</annotation></semantics></math></span>
+正定，
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mi>r</mi></msub><mo>−</mo><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mrow><mi>u</mi><mi>r</mi></mrow></msub><mo>≥</mo><mn>0</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">
+\operatorname{RSS}_r-\operatorname{RSS}_{ur}\ge0,
+</annotation></semantics></math></div>
+等号当且仅当无约束估计已经满足限制。限制缩小了可选参数集合，所以不可能降低最小
+RSS。</p>
+<p><strong>定理 2.15 与完整证明。</strong> 在
+A.1、A.3、A.5、<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>&gt;</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">n&gt;k</annotation></semantics></math></span>、<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">rank</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>R</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>q</mi><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\operatorname{rank}(R)=q\ge1</annotation></semantics></math></span>
+及
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><mi>R</mi><mi>β</mi><mo>=</mo><mi>r</mi></mrow><annotation encoding="application/x-tex">H_0:R\beta=r</annotation></semantics></math></span>
+下，
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>n</mi></msub><mo>=</mo><mfrac><mrow><mo stretchy="false" form="prefix">(</mo><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mi>r</mi></msub><mo>−</mo><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mrow><mi>u</mi><mi>r</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mi>q</mi></mrow><mrow><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mrow><mi>u</mi><mi>r</mi></mrow></msub><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mo>∼</mo><mi>F</mi><mo stretchy="false" form="prefix">(</mo><mi>q</mi><mo>,</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+F_n=
+\frac{(\operatorname{RSS}_r-\operatorname{RSS}_{ur})/q}
+{\operatorname{RSS}_{ur}/(n-k)}
+\sim F(q,n-k).
+</annotation></semantics></math></div> 把刚证明的差值代入，分母是无约束估计
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>s</mi><mn>2</mn></msup><mo>=</mo><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mrow><mi>u</mi><mi>r</mi></mrow></msub><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">s^2=\operatorname{RSS}_{ur}/(n-k)</annotation></semantics></math></span>，整个式子与定理
+2.14
+的矩阵式完全相同，故精确分布随之成立。这个证明也解释了分母为什么不是受约束
+RSS。</p>
+<p><strong>计算前检查。</strong>
+两个模型必须用相同观测、同一个因变量，并且受约束模型是通过施加所声明的
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math></span>
+个独立限制得到。若两个 RSS
+来自不同样本或无嵌套关系，差值不具有这里的含义。<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math></span>
+始终数无约束模型参数个数；受约束模型的自由度增加到
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>−</mo><mi>k</mi><mo>+</mo><mi>q</mi></mrow><annotation encoding="application/x-tex">n-k+q</annotation></semantics></math></span>，但这个检验的分母仍用
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>−</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">n-k</annotation></semantics></math></span>。</p>
+<h2 id="example-a">例题 A</h2>
+<p>同一批
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>30</mn></mrow><annotation encoding="application/x-tex">n=30</annotation></semantics></math></span>
+个观测，无约束模型
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">k=5</annotation></semantics></math></span>，检验
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">q=2</annotation></semantics></math></span>
+条限制，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mrow><mi>u</mi><mi>r</mi></mrow></msub><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">\operatorname{RSS}_{ur}=100</annotation></semantics></math></span>，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mi>r</mi></msub><mo>=</mo><mn>124</mn></mrow><annotation encoding="application/x-tex">\operatorname{RSS}_r=124</annotation></semantics></math></span>。计算
+F 及自由度。</p>
+<h2 id="answer-a">A 解答</h2>
+<details>
+<summary>
+查看示范解答
+</summary>
+<p>拟合损失为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>24</mn><annotation encoding="application/x-tex">24</annotation></semantics></math></span>，每个限制平均损失
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>24</mn><mi>/</mi><mn>2</mn><mo>=</mo><mn>12</mn></mrow><annotation encoding="application/x-tex">24/2=12</annotation></semantics></math></span>。无约束误差方差估计为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>30</mn><mo>−</mo><mn>5</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">100/(30-5)=4</annotation></semantics></math></span>。所以
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>n</mi></msub><mo>=</mo><mfrac><mn>12</mn><mn>4</mn></mfrac><mo>=</mo><mn>3</mn><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>F</mi><mi>n</mi></msub><mo>∼</mo><mi>F</mi><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo>,</mo><mn>25</mn><mo stretchy="false" form="postfix">)</mo><mspace width="1.0em"></mspace><mo stretchy="false" form="prefix">(</mo><msub><mi>H</mi><mn>0</mn></msub><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+F_n=\frac{12}{4}=3,\qquad
+F_n\sim F(2,25)\quad(H_0).
+</annotation></semantics></math></div> 分子有两条独立限制，分母为无约束残差的
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>25</mn><annotation encoding="application/x-tex">25</annotation></semantics></math></span>
+个自由度；不能误用受约束自由度
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>27</mn><annotation encoding="application/x-tex">27</annotation></semantics></math></span>。</p>
+</details>
+<h2 id="practice-b">练习 B</h2><p class="source-label">新增练习 · 练习本课 A 已示范的同一判断、计算或证明动作。</p><p>（补充练习）同一数据
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>40</mn></mrow><annotation encoding="application/x-tex">n=40</annotation></semantics></math></span>，无约束模型
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">k=4</annotation></semantics></math></span>，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">q=1</annotation></semantics></math></span>，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mrow><mi>u</mi><mi>r</mi></mrow></msub><mo>=</mo><mn>72</mn></mrow><annotation encoding="application/x-tex">\operatorname{RSS}_{ur}=72</annotation></semantics></math></span>，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mi>r</mi></msub><mo>=</mo><mn>90</mn></mrow><annotation encoding="application/x-tex">\operatorname{RSS}_r=90</annotation></semantics></math></span>。计算
+F，并用单限制关系求对应双侧 t 的绝对值。</p><div class="practice-controls" data-question-id="C2B117" data-module-id="C2M117" data-mode="guided" data-answer-anchor="answer-b"></div><h2 id="answer-b">B 解答</h2>
+<details>
+<summary>
+查看参考解
+</summary>
+<p><div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>n</mi></msub><mo>=</mo><mfrac><mrow><mo stretchy="false" form="prefix">(</mo><mn>90</mn><mo>−</mo><mn>72</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>1</mn></mrow><mrow><mn>72</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>40</mn><mo>−</mo><mn>4</mn><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mo>=</mo><mfrac><mn>18</mn><mn>2</mn></mfrac><mo>=</mo><mn>9</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+F_n=\frac{(90-72)/1}{72/(40-4)}=\frac{18}{2}=9.
+</annotation></semantics></math></div> 参考分布为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>36</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">F(1,36)</annotation></semantics></math></span>。一个限制时
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>n</mi></msub><mo>=</mo><msubsup><mi>T</mi><mi>n</mi><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">F_n=T_n^2</annotation></semantics></math></span>，所以
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>T</mi><mi>n</mi></msub><mo stretchy="false" form="prefix">|</mo><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">|T_n|=3</annotation></semantics></math></span>。RSS
+形式只能给平方后的偏离，无法从这些 RSS 单独判断
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>T</mi><mi>n</mi></msub><annotation encoding="application/x-tex">T_n</annotation></semantics></math></span>
+的正负号。</p>
+</details>
+<h2 id="summary">一句小结</h2>
+<p>RSS
+差是施加限制的拟合损失；除以限制数，再除以无约束方差估计，就得到同一个 F
+统计量。</p>
+<details class="prepared-review"><summary>精选回顾（回看不记分）</summary><h2 id="review">精选回顾</h2><p>RSS 形式 F 检验的分母用哪一个模型的 RSS 和自由度？</p><h2 id="review-answer">回顾答案</h2><details>
+<summary>
+回忆后查看
+</summary>
+<p>用无约束模型的
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>s</mi><mn>2</mn></msup><mo>=</mo><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mrow><mi>u</mi><mi>r</mi></mrow></msub><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">s^2=\operatorname{RSS}_{ur}/(n-k)</annotation></semantics></math></span>，其中
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math></span>
+是无约束参数数目。分子用
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mi>r</mi></msub><mo>−</mo><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mrow><mi>u</mi><mi>r</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mi>q</mi></mrow><annotation encoding="application/x-tex">(\operatorname{RSS}_r-\operatorname{RSS}_{ur})/q</annotation></semantics></math></span>；两个模型必须在同一样本上且通过所述限制嵌套。</p>
+</details></details></article></div><footer>网站版本 0.1.0 · 记录保存在当前浏览器。请固定使用同一地址与浏览器，并定期导出备份。</footer></main><script type="module" src="runtime/app.js"></script></body></html>

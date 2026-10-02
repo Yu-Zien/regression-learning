@@ -1,0 +1,118 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="application-version" content="0.1.0"><title>完整证明 Gauss–Markov 定理 · 回归分析 · 从直觉到推导</title><style>:root { color-scheme:light; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; color:#26342f; background:#f6f7f3; }
+* { box-sizing:border-box; } body { margin:0; font-size:17px; line-height:1.9; }
+.sheet { width:min(900px,calc(100% - 32px)); margin:30px auto; padding:32px 48px 42px; background:#fff; border:1px solid #e0e5dc; border-radius:12px; }
+nav { display:flex; flex-wrap:wrap; gap:12px 22px; padding-bottom:16px; border-bottom:1px solid #e1e6df; font-size:14px; }
+h1 { font-size:1.8rem; line-height:1.45; margin:27px 0 20px; } h2 { font-size:1.3rem; margin:36px 0 16px; } h3 { font-size:1.1rem; }
+p,ul,ol,table { margin:15px 0; } li+li { margin-top:7px; } a { color:#246a50; text-underline-offset:3px; }
+blockquote { margin:22px 0; padding:5px 20px; background:#f1f6f0; border-left:3px solid #7c9f77; }
+details { border:1px solid #d8e0d4; border-radius:8px; margin:16px 0 24px; padding:0 18px; background:#fcfdfb; } summary { cursor:pointer; padding:13px 0; color:#315b41; font-weight:600; } details[open] { padding-bottom:12px; }
+table { border-collapse:collapse; width:100%; font-size:.96em; display:block; overflow-x:auto; } th,td { border:1px solid #dce3d8; padding:10px 13px; text-align:left; vertical-align:top; } th { background:#f2f5ef; }
+math { font-family:math; font-size:1.04em; } .math-display { overflow-x:auto; padding:8px 2px; margin:20px 0; } .math-display math { margin:0 auto; }
+code { overflow-wrap:anywhere; } pre { overflow:auto; } img,svg { max-width:100%; height:auto; } .source-label,footer { color:#66736b; font-size:14px; } footer { margin-top:36px; padding-top:15px; border-top:1px solid #e1e6df; }
+@media(max-width:620px) { body { font-size:16px; } .sheet { width:calc(100% - 16px); margin:8px auto; padding:20px 18px 28px; } h1 { font-size:1.5rem; } th,td { padding:8px; } }
+</style><link rel="stylesheet" href="runtime/app.css"></head><body><main class="sheet"><header class="brand-bar"><span class="brand-mark" aria-hidden="true">β</span><span class="brand-name">回归分析学习室</span><span class="brand-sub">LEARN · REASON · PRACTICE</span></header><nav aria-label="课程导航"><a href="index.html">继续学习</a><a href="index.html?view=exercises">材料习题</a><a href="index.html?view=progress">目录与进度</a></nav><p id="save-status" role="status"></p><div id="runtime-error" class="runtime-error" role="alert" hidden></div><div id="app-view"><article id="lesson-content" data-module-id="C2M022"><h1 id="完整证明-gaussmarkov-定理">完整证明 Gauss–Markov 定理</h1>
+<p>来源：Chapter 2: Classical Linear Regression Models，PDF 第 21–22
+页。目标：把任意线性无偏估计量分成 OLS
+与额外扰动，并证明其多出半正定方差。</p>
+<h2 id="method">讲解与方法</h2>
+<p>上一课把竞争者写成
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mi>Y</mi></mrow><annotation encoding="application/x-tex">CY</annotation></semantics></math></span>
+且
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mi>X</mi><mo>=</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">CX=I</annotation></semantics></math></span>。本课完成定理
+2.5 的 BLUE 部分；证明的每一步都能指向已讲过的条件或矩阵性质。</p>
+<p><strong>Gauss–Markov 定理。</strong> 在 A.1–A.4 下，对于每个
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>β</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>C</mi><mi>Y</mi></mrow><annotation encoding="application/x-tex">\widetilde\beta=CY</annotation></semantics></math></span>、<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mi>X</mi><mo>=</mo><msub><mi>I</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">CX=I_k</annotation></semantics></math></span>，
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Var</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mover><mi>β</mi><mo accent="true">̃</mo></mover><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mrow><mi mathvariant="normal">Var</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>≽</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}(\widetilde\beta\mid X)-\operatorname{Var}(\widehat\beta\mid X)\succeq0.</annotation></semantics></math></div>
+符号
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>≽</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\succeq0</annotation></semantics></math></span>
+表示半正定。无需正态性。</p>
+<p><strong>完整证明。</strong> 令
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi>X</mi><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">A=(X&#39;X)^{-1}X&#39;</annotation></semantics></math></span>，把竞争系数矩阵写成
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>=</mo><mi>A</mi><mo>+</mo><mi>D</mi></mrow><annotation encoding="application/x-tex">C=A+D</annotation></semantics></math></span>，其中
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mi>C</mi><mo>−</mo><mi>A</mi></mrow><annotation encoding="application/x-tex">D=C-A</annotation></semantics></math></span>。因为两者都无偏，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mi>X</mi><mo>=</mo><mi>A</mi><mi>X</mi><mo>=</mo><msub><mi>I</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">CX=AX=I_k</annotation></semantics></math></span>，故
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mi>X</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>C</mi><mo>−</mo><mi>A</mi><mo stretchy="false" form="postfix">)</mo><mi>X</mi><mo>=</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">DX=(C-A)X=0.</annotation></semantics></math></div>
+A.4 和线性变换规则给出
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Var</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>C</mi><mi>Y</mi><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mi>C</mi><msup><mi>C</mi><mo>′</mo></msup><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><mi>A</mi><mo>+</mo><mi>D</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">(</mo><mi>A</mi><mo>+</mo><mi>D</mi><msup><mo stretchy="false" form="postfix">)</mo><mo>′</mo></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}(CY\mid X)=\sigma^2CC&#39;=\sigma^2(A+D)(A+D)&#39;.</annotation></semantics></math></div>
+展开为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><mi>A</mi><msup><mi>A</mi><mo>′</mo></msup><mo>+</mo><mi>A</mi><msup><mi>D</mi><mo>′</mo></msup><mo>+</mo><mi>D</mi><msup><mi>A</mi><mo>′</mo></msup><mo>+</mo><mi>D</mi><msup><mi>D</mi><mo>′</mo></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\sigma^2(AA&#39;+AD&#39;+DA&#39;+DD&#39;)</annotation></semantics></math></span>。由于
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><msup><mi>D</mi><mo>′</mo></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi>X</mi><mo>′</mo></msup><msup><mi>D</mi><mo>′</mo></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo stretchy="false" form="prefix">(</mo><mi>D</mi><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mo>′</mo></msup><mo>=</mo><mn>0</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">AD&#39;=(X&#39;X)^{-1}X&#39;D&#39;=(X&#39;X)^{-1}(DX)&#39;=0,</annotation></semantics></math></div>
+其转置
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><msup><mi>A</mi><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">DA&#39;</annotation></semantics></math></span>
+也为零。因此
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Var</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mover><mi>β</mi><mo accent="true">̃</mo></mover><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mi mathvariant="normal">Var</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><msup><mi>σ</mi><mn>2</mn></msup><mi>D</mi><msup><mi>D</mi><mo>′</mo></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}(\widetilde\beta\mid X)=\operatorname{Var}(\widehat\beta\mid X)+\sigma^2DD&#39;.</annotation></semantics></math></div>
+对任意
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math></span>，额外二次型为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><msup><mi>a</mi><mo>′</mo></msup><mi>D</mi><msup><mi>D</mi><mo>′</mo></msup><mi>a</mi><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false" form="postfix">∥</mo><msup><mi>D</mi><mo>′</mo></msup><mi>a</mi><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\sigma^2a&#39;DD&#39;a=\sigma^2\|D&#39;a\|^2\ge0</annotation></semantics></math></span>，证明完成。</p>
+<p><strong>等号范围。</strong> 如果全部方向的方差矩阵完全相同，则
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><msup><mi>D</mi><mo>′</mo></msup><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">DD&#39;=0</annotation></semantics></math></span>，由其对角是各行平方和得到
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">D=0</annotation></semantics></math></span>，即
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>=</mo><mi>A</mi></mrow><annotation encoding="application/x-tex">C=A</annotation></semantics></math></span>；在这个类里
+OLS 的系数权重矩阵唯一达到全矩阵等号。但是某个特定方向可有
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>D</mi><mo>′</mo></msup><mi>a</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">D&#39;a=0</annotation></semantics></math></span>，即该方向持平。</p>
+<p><strong>条件各做什么。</strong> A.1、A.2 保证
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mi>Y</mi></mrow><annotation encoding="application/x-tex">CY</annotation></semantics></math></span>
+的无偏条件可写成
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mi>X</mi><mo>=</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">CX=I</annotation></semantics></math></span>；A.3
+让
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math></span>
+存在；A.4 使方差差能化成
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mi>D</mi><msup><mi>D</mi><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">\sigma^2DD&#39;</annotation></semantics></math></span>。若误差协方差一般为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="normal">Σ</mi><annotation encoding="application/x-tex">\Sigma</annotation></semantics></math></span>，交叉项
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi mathvariant="normal">Σ</mi><msup><mi>D</mi><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">A\Sigma D&#39;</annotation></semantics></math></span>
+不再自动为零，经典 BLUE 证明就断开。</p>
+<h2 id="example-a">例题 A：编辑铺垫</h2>
+<p>三个观测仅含截距，球形误差方差
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math></span>。OLS
+权重是
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>3</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>3</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>3</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1/3,1/3,1/3)</annotation></semantics></math></span>，竞争者权重是
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>4</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>4</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1/2,1/4,1/4)</annotation></semantics></math></span>。用
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math></span>
+计算额外方差。</p>
+<h2 id="answer-a">A 解答</h2>
+<details>
+<summary>
+查看示范解答
+</summary>
+<p><div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>6</mn><mo>,</mo><mi>−</mi><mn>1</mn><mi>/</mi><mn>12</mn><mo>,</mo><mi>−</mi><mn>1</mn><mi>/</mi><mn>12</mn><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>D</mi><mn mathvariant="bold">𝟏</mn><mo>=</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">D=(1/6,-1/12,-1/12),\qquad D\mathbf1=0.</annotation></semantics></math></div>
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><msup><mi>D</mi><mo>′</mo></msup><mo>=</mo><mn>1</mn><mi>/</mi><mn>36</mn><mo>+</mo><mn>1</mn><mi>/</mi><mn>144</mn><mo>+</mo><mn>1</mn><mi>/</mi><mn>144</mn><mo>=</mo><mn>1</mn><mi>/</mi><mn>24</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">DD&#39;=1/36+1/144+1/144=1/24.</annotation></semantics></math></div>
+所以竞争者方差比 OLS 多
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mi>/</mi><mn>24</mn></mrow><annotation encoding="application/x-tex">\sigma^2/24</annotation></semantics></math></span>。直接算也得到竞争者方差为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>4</mn><mo>+</mo><mn>1</mn><mi>/</mi><mn>16</mn><mo>+</mo><mn>1</mn><mi>/</mi><mn>16</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>3</mn><msup><mi>σ</mi><mn>2</mn></msup><mi>/</mi><mn>8</mn></mrow><annotation encoding="application/x-tex">\sigma^2(1/4+1/16+1/16)=3\sigma^2/8</annotation></semantics></math></span>，减去
+OLS 的
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mi>/</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">\sigma^2/3</annotation></semantics></math></span>
+正好是
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mi>/</mi><mn>24</mn></mrow><annotation encoding="application/x-tex">\sigma^2/24</annotation></semantics></math></span>。</p>
+</details>
+<h2 id="practice-b">练习 B：补充练习</h2><p class="source-label">新增练习 · 沿用本课 A 已示范的同一方法，练习条件识别、计算或证明中的关键动作。</p><p>仍为三个观测截距模型，竞争者权重为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mi>/</mi><mn>3</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>3</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(2/3,1/3,0)</annotation></semantics></math></span>。求
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math></span>、额外方差与竞争者总方差，并核对
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mi>X</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">DX=0</annotation></semantics></math></span>。</p><div class="practice-controls" data-question-id="C2B022" data-module-id="C2M022" data-mode="guided" data-answer-anchor="answer-b"></div><h2 id="answer-b">B 解答</h2>
+<details>
+<summary>
+查看参考解
+</summary>
+<p><div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>3</mn><mo>,</mo><mn>0</mn><mo>,</mo><mi>−</mi><mn>1</mn><mi>/</mi><mn>3</mn><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="1.0em"></mspace><mi>D</mi><mi>X</mi><mo>=</mo><mi>D</mi><mn mathvariant="bold">𝟏</mn><mo>=</mo><mn>0</mn><mo>,</mo><mspace width="1.0em"></mspace><mi>D</mi><msup><mi>D</mi><mo>′</mo></msup><mo>=</mo><mn>1</mn><mi>/</mi><mn>9</mn><mo>+</mo><mn>1</mn><mi>/</mi><mn>9</mn><mo>=</mo><mn>2</mn><mi>/</mi><mn>9</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">D=(1/3,0,-1/3),\quad DX=D\mathbf1=0,\quad DD&#39;=1/9+1/9=2/9.</annotation></semantics></math></div>
+额外方差为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><msup><mi>σ</mi><mn>2</mn></msup><mi>/</mi><mn>9</mn></mrow><annotation encoding="application/x-tex">2\sigma^2/9</annotation></semantics></math></span>；OLS
+方差为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mi>/</mi><mn>3</mn><mo>=</mo><mn>3</mn><msup><mi>σ</mi><mn>2</mn></msup><mi>/</mi><mn>9</mn></mrow><annotation encoding="application/x-tex">\sigma^2/3=3\sigma^2/9</annotation></semantics></math></span>，所以竞争者总方差
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><msup><mi>σ</mi><mn>2</mn></msup><mi>/</mi><mn>9</mn></mrow><annotation encoding="application/x-tex">5\sigma^2/9</annotation></semantics></math></span>。直接用权重平方和
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mi>/</mi><mn>9</mn><mo>+</mo><mn>1</mn><mi>/</mi><mn>9</mn><mo>+</mo><mn>0</mn><mo>=</mo><mn>5</mn><mi>/</mi><mn>9</mn></mrow><annotation encoding="application/x-tex">4/9+1/9+0=5/9</annotation></semantics></math></span>
+也得到同一结果。</p>
+</details>
+<h2 id="summary">一句小结</h2>
+<p>无偏使
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mi>X</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">DX=0</annotation></semantics></math></span>，球形误差使交叉项消失，剩下的
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mi>D</mi><msup><mi>D</mi><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">\sigma^2DD&#39;</annotation></semantics></math></span>
+永远半正定。</p>
+<details class="prepared-review"><summary>精选回顾（回看不记分）</summary><h2 id="review">精选回顾</h2><p>Gauss–Markov 证明中，为什么交叉项
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><msup><mi>D</mi><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">AD&#39;</annotation></semantics></math></span>
+等于零？</p><h2 id="review-answer">回顾答案</h2><details>
+<summary>
+回忆后查看
+</summary>
+<p>竞争者与 OLS 都条件无偏，故
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mi>X</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">DX=0</annotation></semantics></math></span>；而
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi>X</mi><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">A=(X&#39;X)^{-1}X&#39;</annotation></semantics></math></span>，所以
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><msup><mi>D</mi><mo>′</mo></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo stretchy="false" form="prefix">(</mo><mi>D</mi><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mo>′</mo></msup><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">AD&#39;=(X&#39;X)^{-1}(DX)&#39;=0</annotation></semantics></math></span>。完整论证见本课方法部分。</p>
+</details></details></article></div><footer>网站版本 0.1.0 · 记录保存在当前浏览器。请固定使用同一地址与浏览器，并定期导出备份。</footer></main><script type="module" src="runtime/app.js"></script></body></html>

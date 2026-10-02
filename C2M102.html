@@ -1,0 +1,105 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="application-version" content="0.1.0"><title>把平方和识别为卡方分布 · 回归分析 · 从直觉到推导</title><style>:root { color-scheme:light; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; color:#26342f; background:#f6f7f3; }
+* { box-sizing:border-box; } body { margin:0; font-size:17px; line-height:1.9; }
+.sheet { width:min(900px,calc(100% - 32px)); margin:30px auto; padding:32px 48px 42px; background:#fff; border:1px solid #e0e5dc; border-radius:12px; }
+nav { display:flex; flex-wrap:wrap; gap:12px 22px; padding-bottom:16px; border-bottom:1px solid #e1e6df; font-size:14px; }
+h1 { font-size:1.8rem; line-height:1.45; margin:27px 0 20px; } h2 { font-size:1.3rem; margin:36px 0 16px; } h3 { font-size:1.1rem; }
+p,ul,ol,table { margin:15px 0; } li+li { margin-top:7px; } a { color:#246a50; text-underline-offset:3px; }
+blockquote { margin:22px 0; padding:5px 20px; background:#f1f6f0; border-left:3px solid #7c9f77; }
+details { border:1px solid #d8e0d4; border-radius:8px; margin:16px 0 24px; padding:0 18px; background:#fcfdfb; } summary { cursor:pointer; padding:13px 0; color:#315b41; font-weight:600; } details[open] { padding-bottom:12px; }
+table { border-collapse:collapse; width:100%; font-size:.96em; display:block; overflow-x:auto; } th,td { border:1px solid #dce3d8; padding:10px 13px; text-align:left; vertical-align:top; } th { background:#f2f5ef; }
+math { font-family:math; font-size:1.04em; } .math-display { overflow-x:auto; padding:8px 2px; margin:20px 0; } .math-display math { margin:0 auto; }
+code { overflow-wrap:anywhere; } pre { overflow:auto; } img,svg { max-width:100%; height:auto; } .source-label,footer { color:#66736b; font-size:14px; } footer { margin-top:36px; padding-top:15px; border-top:1px solid #e1e6df; }
+@media(max-width:620px) { body { font-size:16px; } .sheet { width:calc(100% - 16px); margin:8px auto; padding:20px 18px 28px; } h1 { font-size:1.5rem; } th,td { padding:8px; } }
+</style><link rel="stylesheet" href="runtime/app.css"></head><body><main class="sheet"><header class="brand-bar"><span class="brand-mark" aria-hidden="true">β</span><span class="brand-name">回归分析学习室</span><span class="brand-sub">LEARN · REASON · PRACTICE</span></header><nav aria-label="课程导航"><a href="index.html">继续学习</a><a href="index.html?view=exercises">材料习题</a><a href="index.html?view=progress">目录与进度</a></nav><p id="save-status" role="status"></p><div id="runtime-error" class="runtime-error" role="alert" hidden></div><div id="app-view"><article id="lesson-content" data-module-id="C2M102"><h1 id="把平方和识别为卡方分布">把平方和识别为卡方分布</h1>
+<p>来源：Chapter 2: Classical Linear Regression Models，PDF 第 25
+页，引理
+2.6(1)。目标：通过标准化，将正态向量的二次型写成独立标准正态的平方和。</p>
+<h2 id="method">定义、条件与方法</h2>
+<p>上一步给了正态向量。本步学习“平方再求和”后的分布，为残差平方和作准备。</p>
+<p><strong>定义。</strong> 若
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>Z</mi><mi>d</mi></msub></mrow><annotation encoding="application/x-tex">Z_1,\ldots,Z_d</annotation></semantics></math></span>
+相互独立且各服从
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">N(0,1)</annotation></semantics></math></span>，则
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mo>=</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>d</mi></munderover><msubsup><mi>Z</mi><mi>j</mi><mn>2</mn></msubsup><mo>∼</mo><msup><mi>χ</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><mi>d</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+U=\sum_{j=1}^d Z_j^2\sim\chi^2(d).
+</annotation></semantics></math></div>
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math></span>
+称自由度，表示这里有多少个独立标准正态方向。不能把相关变量的平方和直接说成卡方。由
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><msubsup><mi>Z</mi><mi>j</mi><mn>2</mn></msubsup><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">E(Z_j^2)=1</annotation></semantics></math></span>，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>U</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>d</mi></mrow><annotation encoding="application/x-tex">E(U)=d</annotation></semantics></math></span>；利用
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><msubsup><mi>Z</mi><mi>j</mi><mn>4</mn></msubsup><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">E(Z_j^4)=3</annotation></semantics></math></span>
+与独立性，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Var</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>U</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>2</mn><mi>d</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}(U)=2d</annotation></semantics></math></span>。这里的四阶矩可由正态密度分部积分递推
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>Z</mi><mrow><mn>2</mn><mi>m</mi></mrow></msup><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mi>m</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mi>E</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>Z</mi><mrow><mn>2</mn><mi>m</mi><mo>−</mo><mn>2</mn></mrow></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">E(Z^{2m})=(2m-1)E(Z^{2m-2})</annotation></semantics></math></span>
+得到。</p>
+<p><strong>白化需要的矩阵知识。</strong> 对称正定矩阵
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="normal">Σ</mi><annotation encoding="application/x-tex">\Sigma</annotation></semantics></math></span>
+可以写成
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Σ</mi><mo>=</mo><mi>Q</mi><mi mathvariant="normal">Λ</mi><msup><mi>Q</mi><mo>′</mo></msup><mo>,</mo><mspace width="1.0em"></mspace><msup><mi>Q</mi><mo>′</mo></msup><mi>Q</mi><mo>=</mo><msub><mi>I</mi><mi>n</mi></msub><mo>,</mo><mspace width="1.0em"></mspace><mi mathvariant="normal">Λ</mi><mo>=</mo><mrow><mi mathvariant="normal">diag</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>λ</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>λ</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="0.222em"></mspace><msub><mi>λ</mi><mi>i</mi></msub><mo>&gt;</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\Sigma=Q\Lambda Q&#39;,\quad Q&#39;Q=I_n,\quad
+\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_n),\ \lambda_i&gt;0.
+</annotation></semantics></math></div>
+这是实对称矩阵的正交特征分解；<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math></span>
+的列为互相垂直的单位特征向量，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\lambda_i</annotation></semantics></math></span>
+是各方向的方差。定义
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="normal">Σ</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mo>=</mo><mi>Q</mi><mrow><mi mathvariant="normal">diag</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msubsup><mi>λ</mi><mi>i</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msubsup><mo stretchy="false" form="postfix">)</mo><msup><mi>Q</mi><mo>′</mo></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\Sigma^{-1/2}=Q\operatorname{diag}(\lambda_i^{-1/2})Q&#39;.
+</annotation></semantics></math></div>
+它把每个特征方向按标准差缩放。这是后续投影与 GLS
+共用的有限维线性代数工具。</p>
+<p><strong>引理 2.6(1) 与证明。</strong> 若
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi><mo>∼</mo><mi>N</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mi mathvariant="normal">Σ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\varepsilon\sim N(0,\Sigma)</annotation></semantics></math></span>
+且
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="normal">Σ</mi><annotation encoding="application/x-tex">\Sigma</annotation></semantics></math></span>
+非奇异，则其协方差矩阵实际为正定。令
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><msup><mi mathvariant="normal">Σ</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mi>ε</mi></mrow><annotation encoding="application/x-tex">Z=\Sigma^{-1/2}\varepsilon</annotation></semantics></math></span>。线性变换正态性与协方差运算给出
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>∼</mo><mi>N</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><msub><mi>I</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><msup><mi>ε</mi><mo>′</mo></msup><msup><mi mathvariant="normal">Σ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>ε</mi><mo>=</mo><msup><mi>Z</mi><mo>′</mo></msup><mi>Z</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+Z\sim N(0,I_n),\qquad
+\varepsilon&#39;\Sigma^{-1}\varepsilon=Z&#39;Z.
+</annotation></semantics></math></div>
+标准正态联合密度是各坐标密度的乘积，因此
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Z</mi><mi>i</mi></msub><annotation encoding="application/x-tex">Z_i</annotation></semantics></math></span>
+独立，故
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Z</mi><mo>′</mo></msup><mi>Z</mi><mo>∼</mo><msup><mi>χ</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Z&#39;Z\sim\chi^2(n)</annotation></semantics></math></span>。非奇异性用于取逆与保留全部
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math></span>
+个方向；若奇异，原式中的普通逆不存在，不能原样使用。</p>
+<h2 id="example-a">例题 A</h2>
+<p>设
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi><mo>∼</mo><mi>N</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mrow><mi mathvariant="normal">diag</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>4</mn><mo>,</mo><mn>9</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\varepsilon\sim N(0,\operatorname{diag}(4,9))</annotation></semantics></math></span>。识别
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>ε</mi><mn>1</mn><mn>2</mn></msubsup><mi>/</mi><mn>4</mn><mo>+</mo><msubsup><mi>ε</mi><mn>2</mn><mn>2</mn></msubsup><mi>/</mi><mn>9</mn></mrow><annotation encoding="application/x-tex">\varepsilon_1^2/4+\varepsilon_2^2/9</annotation></semantics></math></span>
+的分布。</p>
+<h2 id="answer-a">A 解答</h2>
+<details>
+<summary>
+查看示范解答
+</summary>
+<p>令
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mn>1</mn></msub><mo>=</mo><msub><mi>ε</mi><mn>1</mn></msub><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">Z_1=\varepsilon_1/2</annotation></semantics></math></span>、<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mn>2</mn></msub><mo>=</mo><msub><mi>ε</mi><mn>2</mn></msub><mi>/</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">Z_2=\varepsilon_2/3</annotation></semantics></math></span>。二者联合正态、方差均为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math></span>
+且协方差为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math></span>，所以相互独立。题中表达式等于
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>Z</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>Z</mi><mn>2</mn><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">Z_1^2+Z_2^2</annotation></semantics></math></span>，服从
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>χ</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\chi^2(2)</annotation></semantics></math></span>，均值为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math></span>。除以的是方差，不是标准差。</p>
+</details>
+<h2 id="practice-b">练习 B</h2><p class="source-label">新增练习 · 练习本课 A 已示范的同一判断、计算或证明动作。</p><p>（补充练习）设
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi><mo>∼</mo><mi>N</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mrow><mi mathvariant="normal">diag</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>4</mn><mo>,</mo><mn>16</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\varepsilon\sim N(0,\operatorname{diag}(1,4,16))</annotation></semantics></math></span>。找出一个服从
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>χ</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><mn>3</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\chi^2(3)</annotation></semantics></math></span>
+的二次型，并说明自由度为何为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>3</mn><annotation encoding="application/x-tex">3</annotation></semantics></math></span>。</p><div class="practice-controls" data-question-id="C2B102" data-module-id="C2M102" data-mode="guided" data-answer-anchor="answer-b"></div><h2 id="answer-b">B 解答</h2>
+<details>
+<summary>
+查看参考解
+</summary>
+<p>取
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>ε</mi><mo>′</mo></msup><msup><mi mathvariant="normal">Σ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>ε</mi><mo>=</mo><msubsup><mi>ε</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><mfrac><msubsup><mi>ε</mi><mn>2</mn><mn>2</mn></msubsup><mn>4</mn></mfrac><mo>+</mo><mfrac><msubsup><mi>ε</mi><mn>3</mn><mn>2</mn></msubsup><mn>16</mn></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\varepsilon&#39;\Sigma^{-1}\varepsilon
+=\varepsilon_1^2+\frac{\varepsilon_2^2}{4}+\frac{\varepsilon_3^2}{16}.
+</annotation></semantics></math></div> 标准化坐标是
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ε</mi><mn>1</mn></msub><mo>,</mo><msub><mi>ε</mi><mn>2</mn></msub><mi>/</mi><mn>2</mn><mo>,</mo><msub><mi>ε</mi><mn>3</mn></msub><mi>/</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">\varepsilon_1,\varepsilon_2/2,\varepsilon_3/4</annotation></semantics></math></span>。它们构成
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><msub><mi>I</mi><mn>3</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">N(0,I_3)</annotation></semantics></math></span>
+向量，故三个独立标准正态的平方和服从
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>χ</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><mn>3</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\chi^2(3)</annotation></semantics></math></span>。三个正方差方向都保留下来，因此自由度是
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>3</mn><annotation encoding="application/x-tex">3</annotation></semantics></math></span>。</p>
+</details>
+<h2 id="summary">一句小结</h2>
+<p>先把正态坐标标准化并确认独立，再用平方和定义识别卡方。</p>
+</article></div><footer>网站版本 0.1.0 · 记录保存在当前浏览器。请固定使用同一地址与浏览器，并定期导出备份。</footer></main><script type="module" src="runtime/app.js"></script></body></html>

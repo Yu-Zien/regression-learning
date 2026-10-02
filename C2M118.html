@@ -1,0 +1,101 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="application-version" content="0.1.0"><title>完成原例 2.16 的相等斜率检验 · 回归分析 · 从直觉到推导</title><style>:root { color-scheme:light; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; color:#26342f; background:#f6f7f3; }
+* { box-sizing:border-box; } body { margin:0; font-size:17px; line-height:1.9; }
+.sheet { width:min(900px,calc(100% - 32px)); margin:30px auto; padding:32px 48px 42px; background:#fff; border:1px solid #e0e5dc; border-radius:12px; }
+nav { display:flex; flex-wrap:wrap; gap:12px 22px; padding-bottom:16px; border-bottom:1px solid #e1e6df; font-size:14px; }
+h1 { font-size:1.8rem; line-height:1.45; margin:27px 0 20px; } h2 { font-size:1.3rem; margin:36px 0 16px; } h3 { font-size:1.1rem; }
+p,ul,ol,table { margin:15px 0; } li+li { margin-top:7px; } a { color:#246a50; text-underline-offset:3px; }
+blockquote { margin:22px 0; padding:5px 20px; background:#f1f6f0; border-left:3px solid #7c9f77; }
+details { border:1px solid #d8e0d4; border-radius:8px; margin:16px 0 24px; padding:0 18px; background:#fcfdfb; } summary { cursor:pointer; padding:13px 0; color:#315b41; font-weight:600; } details[open] { padding-bottom:12px; }
+table { border-collapse:collapse; width:100%; font-size:.96em; display:block; overflow-x:auto; } th,td { border:1px solid #dce3d8; padding:10px 13px; text-align:left; vertical-align:top; } th { background:#f2f5ef; }
+math { font-family:math; font-size:1.04em; } .math-display { overflow-x:auto; padding:8px 2px; margin:20px 0; } .math-display math { margin:0 auto; }
+code { overflow-wrap:anywhere; } pre { overflow:auto; } img,svg { max-width:100%; height:auto; } .source-label,footer { color:#66736b; font-size:14px; } footer { margin-top:36px; padding-top:15px; border-top:1px solid #e1e6df; }
+@media(max-width:620px) { body { font-size:16px; } .sheet { width:calc(100% - 16px); margin:8px auto; padding:20px 18px 28px; } h1 { font-size:1.5rem; } th,td { padding:8px; } }
+</style><link rel="stylesheet" href="runtime/app.css"></head><body><main class="sheet"><header class="brand-bar"><span class="brand-mark" aria-hidden="true">β</span><span class="brand-name">回归分析学习室</span><span class="brand-sub">LEARN · REASON · PRACTICE</span></header><nav aria-label="课程导航"><a href="index.html">继续学习</a><a href="index.html?view=exercises">材料习题</a><a href="index.html?view=progress">目录与进度</a></nav><p id="save-status" role="status"></p><div id="runtime-error" class="runtime-error" role="alert" hidden></div><div id="app-view"><article id="lesson-content" data-module-id="C2M118"><h1 id="完成原例-2.16-的相等斜率检验">完成原例 2.16 的相等斜率检验</h1>
+<p>来源：Chapter 2: Classical Linear Regression Models，PDF 第 37 页，例
+2.16。目标：把系数相等限制落实为合并解释变量，再用 RSS 形式检验。</p>
+<h2 id="method">定义、条件与方法</h2>
+<p>受约束回归有时不必直接用矩阵公式，可以通过重新写模型实现。本步完整处理讲义原例
+2.16。</p>
+<p><strong>原例 2.16 的完整题意。</strong> 在
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mi>i</mi></msub><mo>=</mo><msub><mi>β</mi><mn>1</mn></msub><mo>+</mo><msub><mi>β</mi><mn>2</mn></msub><msub><mi>X</mi><mrow><mi>i</mi><mn>2</mn></mrow></msub><mo>+</mo><msub><mi>β</mi><mn>3</mn></msub><msub><mi>X</mi><mrow><mi>i</mi><mn>3</mn></mrow></msub><mo>+</mo><msub><mi>ε</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">
+Y_i=\beta_1+\beta_2X_{i2}+\beta_3X_{i3}+\varepsilon_i
+</annotation></semantics></math></div> 中，检验
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><msub><mi>β</mi><mn>2</mn></msub><mo>=</mo><msub><mi>β</mi><mn>3</mn></msub></mrow><annotation encoding="application/x-tex">H_0:\beta_2=\beta_3</annotation></semantics></math></span>。将共同斜率记为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math></span>，原假设下模型变成
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mi>i</mi></msub><mo>=</mo><msub><mi>β</mi><mn>1</mn></msub><mo>+</mo><mi>γ</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mrow><mi>i</mi><mn>2</mn></mrow></msub><mo>+</mo><msub><mi>X</mi><mrow><mi>i</mi><mn>3</mn></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>+</mo><msub><mi>ε</mi><mi>i</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">
+Y_i=\beta_1+\gamma(X_{i2}+X_{i3})+\varepsilon_i.
+</annotation></semantics></math></div> 所以受约束解释变量是讲义中的
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>X</mi><mi>i</mi><mo>*</mo></msubsup><mo>=</mo><msub><mi>X</mi><mrow><mi>i</mi><mn>2</mn></mrow></msub><mo>+</mo><msub><mi>X</mi><mrow><mi>i</mi><mn>3</mn></mrow></msub></mrow><annotation encoding="application/x-tex">X_i^*=X_{i2}+X_{i3}</annotation></semantics></math></span>，连同截距一起回归。不是删去任意一个解释变量，也不是使用两变量的差。</p>
+<p><strong>执行方法。</strong>
+第一次回归保留截距和两个原始解释变量，得到
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mrow><mi>u</mi><mi>r</mi></mrow></msub><annotation encoding="application/x-tex">\operatorname{RSS}_{ur}</annotation></semantics></math></span>；第二次回归保留截距和
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>X</mi><mi>i</mi><mo>*</mo></msubsup><annotation encoding="application/x-tex">X_i^*</annotation></semantics></math></span>，得到
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mi>r</mi></msub><annotation encoding="application/x-tex">\operatorname{RSS}_r</annotation></semantics></math></span>。限制矩阵为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>,</mo><mi>−</mi><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">R=(0,1,-1)</annotation></semantics></math></span>，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">r=0</annotation></semantics></math></span>，所以
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">q=1</annotation></semantics></math></span>，无约束
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">k=3</annotation></semantics></math></span>，统计量为
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>n</mi></msub><mo>=</mo><mfrac><mrow><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mi>r</mi></msub><mo>−</mo><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mrow><mi>u</mi><mi>r</mi></mrow></msub></mrow><mrow><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mrow><mi>u</mi><mi>r</mi></mrow></msub><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mn>3</mn><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
+F_n=\frac{\operatorname{RSS}_r-\operatorname{RSS}_{ur}}
+{\operatorname{RSS}_{ur}/(n-3)}.
+</annotation></semantics></math></div> 在 A.1、A.3、A.5 与原假设下服从
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mi>n</mi><mo>−</mo><mn>3</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">F(1,n-3)</annotation></semantics></math></span>。也可使用
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>n</mi></msub><mo>=</mo><mfrac><mrow><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>2</mn></msub><mo>−</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>3</mn></msub></mrow><mrow><mi>s</mi><msqrt><mrow><msub><mi>Q</mi><mn>22</mn></msub><mo>+</mo><msub><mi>Q</mi><mn>33</mn></msub><mo>−</mo><mn>2</mn><msub><mi>Q</mi><mn>23</mn></msub></mrow></msqrt></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>F</mi><mi>n</mi></msub><mo>=</mo><msubsup><mi>T</mi><mi>n</mi><mn>2</mn></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">
+T_n=\frac{\widehat\beta_2-\widehat\beta_3}
+{s\sqrt{Q_{22}+Q_{33}-2Q_{23}}},
+\qquad F_n=T_n^2.
+</annotation></semantics></math></div> 两种计算方式检验同一个双侧限制。</p>
+<p><strong>为何可继续估计受约束模型。</strong> 若无约束
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math></span>
+满列秩，则
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math></span>
+乘以把
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>β</mi><mn>1</mn></msub><mo>,</mo><mi>γ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(\beta_1,\gamma)</annotation></semantics></math></span>
+映射到
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>β</mi><mn>1</mn></msub><mo>,</mo><mi>γ</mi><mo>,</mo><mi>γ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(\beta_1,\gamma,\gamma)</annotation></semantics></math></span>
+的满列秩矩阵后仍满列秩，故截距与
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>2</mn></msub><mo>+</mo><msub><mi>X</mi><mn>3</mn></msub></mrow><annotation encoding="application/x-tex">X_2+X_3</annotation></semantics></math></span>
+组成的受约束设计矩阵可识别。</p>
+<h2 id="example-a">例题 A</h2>
+<p>（原例 2.16
+的补充数值）<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>23</mn></mrow><annotation encoding="application/x-tex">n=23</annotation></semantics></math></span>、<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mrow><mi>u</mi><mi>r</mi></mrow></msub><mo>=</mo><mn>40</mn></mrow><annotation encoding="application/x-tex">\operatorname{RSS}_{ur}=40</annotation></semantics></math></span>、<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mi>r</mi></msub><mo>=</mo><mn>48</mn></mrow><annotation encoding="application/x-tex">\operatorname{RSS}_r=48</annotation></semantics></math></span>。写出两次回归及
+F 值。</p>
+<h2 id="answer-a">A 解答</h2>
+<details>
+<summary>
+查看示范解答
+</summary>
+<p>无约束回归为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math></span>
+对
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><msub><mi>X</mi><mn>2</mn></msub><mo>,</mo><msub><mi>X</mi><mn>3</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1,X_2,X_3)</annotation></semantics></math></span>；受约束回归为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math></span>
+对
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><msub><mi>X</mi><mn>2</mn></msub><mo>+</mo><msub><mi>X</mi><mn>3</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1,X_2+X_3)</annotation></semantics></math></span>。有
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">k=3</annotation></semantics></math></span>、<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">q=1</annotation></semantics></math></span>、<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>−</mo><mi>k</mi><mo>=</mo><mn>20</mn></mrow><annotation encoding="application/x-tex">n-k=20</annotation></semantics></math></span>，
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>n</mi></msub><mo>=</mo><mfrac><mrow><mn>48</mn><mo>−</mo><mn>40</mn></mrow><mrow><mn>40</mn><mi>/</mi><mn>20</mn></mrow></mfrac><mo>=</mo><mn>4</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+F_n=\frac{48-40}{40/20}=4.
+</annotation></semantics></math></div> 参考分布为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>20</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">F(1,20)</annotation></semantics></math></span>；等价双侧
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math></span>
+统计量的绝对值为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math></span>。原材料没有这些数字，它们用于展示计算方法。</p>
+</details>
+<h2 id="practice-b">练习 B</h2><p class="source-label">新增练习 · 练习本课 A 已示范的同一判断、计算或证明动作。</p><p>（补充练习）同一相等斜率检验中，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>33</mn></mrow><annotation encoding="application/x-tex">n=33</annotation></semantics></math></span>、<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mrow><mi>u</mi><mi>r</mi></mrow></msub><mo>=</mo><mn>90</mn></mrow><annotation encoding="application/x-tex">\operatorname{RSS}_{ur}=90</annotation></semantics></math></span>、<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">RSS</mi><mo>&#8289;</mo></mrow><mi>r</mi></msub><mo>=</mo><mn>117</mn></mrow><annotation encoding="application/x-tex">\operatorname{RSS}_r=117</annotation></semantics></math></span>。给出受约束模型、F
+值与自由度。</p><div class="practice-controls" data-question-id="C2B118" data-module-id="C2M118" data-mode="guided" data-answer-anchor="answer-b"></div><h2 id="answer-b">B 解答</h2>
+<details>
+<summary>
+查看参考解
+</summary>
+<p>受约束模型仍是
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mi>i</mi></msub><mo>=</mo><msub><mi>β</mi><mn>1</mn></msub><mo>+</mo><mi>γ</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mrow><mi>i</mi><mn>2</mn></mrow></msub><mo>+</mo><msub><mi>X</mi><mrow><mi>i</mi><mn>3</mn></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>+</mo><msub><mi>ε</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">Y_i=\beta_1+\gamma(X_{i2}+X_{i3})+\varepsilon_i</annotation></semantics></math></span>。无约束模型有三个参数，所以
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>s</mi><mn>2</mn></msup><mo>=</mo><mfrac><mn>90</mn><mrow><mn>33</mn><mo>−</mo><mn>3</mn></mrow></mfrac><mo>=</mo><mn>3</mn><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>F</mi><mi>n</mi></msub><mo>=</mo><mfrac><mrow><mn>117</mn><mo>−</mo><mn>90</mn></mrow><mn>3</mn></mfrac><mo>=</mo><mn>9</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+s^2=\frac{90}{33-3}=3,\qquad
+F_n=\frac{117-90}{3}=9.
+</annotation></semantics></math></div> 其原假设参考分布为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>30</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">F(1,30)</annotation></semantics></math></span>。一个限制时等价双侧
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>T</mi><mi>n</mi></msub><mo stretchy="false" form="prefix">|</mo><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">|T_n|=3</annotation></semantics></math></span>。</p>
+</details>
+<h2 id="summary">一句小结</h2>
+<p>检验两个斜率相等时，受约束回归使用它们对应解释变量的和；保留原数据与截距后比较
+RSS。</p>
+</article></div><footer>网站版本 0.1.0 · 记录保存在当前浏览器。请固定使用同一地址与浏览器，并定期导出备份。</footer></main><script type="module" src="runtime/app.js"></script></body></html>

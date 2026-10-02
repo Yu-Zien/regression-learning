@@ -1,0 +1,75 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="application-version" content="0.1.0"><title>从误差分解证明 OLS 无偏 · 回归分析 · 从直觉到推导</title><style>:root { color-scheme:light; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; color:#26342f; background:#f6f7f3; }
+* { box-sizing:border-box; } body { margin:0; font-size:17px; line-height:1.9; }
+.sheet { width:min(900px,calc(100% - 32px)); margin:30px auto; padding:32px 48px 42px; background:#fff; border:1px solid #e0e5dc; border-radius:12px; }
+nav { display:flex; flex-wrap:wrap; gap:12px 22px; padding-bottom:16px; border-bottom:1px solid #e1e6df; font-size:14px; }
+h1 { font-size:1.8rem; line-height:1.45; margin:27px 0 20px; } h2 { font-size:1.3rem; margin:36px 0 16px; } h3 { font-size:1.1rem; }
+p,ul,ol,table { margin:15px 0; } li+li { margin-top:7px; } a { color:#246a50; text-underline-offset:3px; }
+blockquote { margin:22px 0; padding:5px 20px; background:#f1f6f0; border-left:3px solid #7c9f77; }
+details { border:1px solid #d8e0d4; border-radius:8px; margin:16px 0 24px; padding:0 18px; background:#fcfdfb; } summary { cursor:pointer; padding:13px 0; color:#315b41; font-weight:600; } details[open] { padding-bottom:12px; }
+table { border-collapse:collapse; width:100%; font-size:.96em; display:block; overflow-x:auto; } th,td { border:1px solid #dce3d8; padding:10px 13px; text-align:left; vertical-align:top; } th { background:#f2f5ef; }
+math { font-family:math; font-size:1.04em; } .math-display { overflow-x:auto; padding:8px 2px; margin:20px 0; } .math-display math { margin:0 auto; }
+code { overflow-wrap:anywhere; } pre { overflow:auto; } img,svg { max-width:100%; height:auto; } .source-label,footer { color:#66736b; font-size:14px; } footer { margin-top:36px; padding-top:15px; border-top:1px solid #e1e6df; }
+@media(max-width:620px) { body { font-size:16px; } .sheet { width:calc(100% - 16px); margin:8px auto; padding:20px 18px 28px; } h1 { font-size:1.5rem; } th,td { padding:8px; } }
+</style><link rel="stylesheet" href="runtime/app.css"></head><body><main class="sheet"><header class="brand-bar"><span class="brand-mark" aria-hidden="true">β</span><span class="brand-name">回归分析学习室</span><span class="brand-sub">LEARN · REASON · PRACTICE</span></header><nav aria-label="课程导航"><a href="index.html">继续学习</a><a href="index.html?view=exercises">材料习题</a><a href="index.html?view=progress">目录与进度</a></nav><p id="save-status" role="status"></p><div id="runtime-error" class="runtime-error" role="alert" hidden></div><div id="app-view"><article id="lesson-content" data-module-id="C2M016"><h1 id="从误差分解证明-ols-无偏">从误差分解证明 OLS 无偏</h1>
+<p>来源：Chapter 2: Classical Linear Regression Models，PDF 第 19、21–22
+页。目标：分解估计误差并逐步说明 A.2 在条件无偏性中的作用。</p>
+<h2 id="method">讲解与方法</h2>
+<p>前面都是“给定一份数据怎样算”。现在把样本看成会重复抽取的随机对象，研究估计量与固定真参数的关系。本课先问平均位置是否正确。</p>
+<p>记
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi>X</mi><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">A=(X&#39;X)^{-1}X&#39;</annotation></semantics></math></span>，则
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>X</mi><mo>=</mo><msub><mi>I</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">AX=I_k</annotation></semantics></math></span>。把
+A.1 代入 OLS：
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>=</mo><mi>A</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mi>β</mi><mo>+</mo><mi>ε</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>β</mi><mo>+</mo><mi>A</mi><mi>ε</mi><mo>,</mo><mspace width="2.0em"></mspace><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>β</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi>X</mi><mo>′</mo></msup><mi>ε</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\widehat\beta=A(X\beta+\varepsilon)=\beta+A\varepsilon,\qquad\widehat\beta-\beta=(X&#39;X)^{-1}X&#39;\varepsilon.</annotation></semantics></math></div>
+这是后续性质的共同起点。给定
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math></span>
+后，矩阵
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math></span>
+是已知常数；条件期望对和与常数倍保持线性，因此
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>β</mi><mo>+</mo><mi>A</mi><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>ε</mi><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>β</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">E(\widehat\beta\mid X)=\beta+A E(\varepsilon\mid X)=\beta.</annotation></semantics></math></div>
+最后一步恰好使用 A.2。A.1 提供正确模型关系，A.3 保证逆存在，A.4
+没有出场。因此异方差本身不使 OLS 有偏。</p>
+<p><strong>无条件无偏。</strong> 对上述等式再取期望：
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>E</mi><mo stretchy="false" form="prefix">[</mo><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mi>β</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">E(\widehat\beta)=E[E(\widehat\beta\mid X)]=\beta.</annotation></semantics></math></div>
+这一步需无条件均值存在，例如
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="postfix">∥</mo><mi>A</mi><mi>ε</mi><mo stretchy="false" form="postfix">∥</mo><mo>&lt;</mo><mi>∞</mi></mrow><annotation encoding="application/x-tex">E\|A\varepsilon\|&lt;\infty</annotation></semantics></math></span>。讲义的有限样本表述通常默认所述矩存在；随机
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math></span>
+可能非常接近奇异，有限的条件矩不自动保证无条件矩有限。本课程凡比较无条件方差也同样明确要求相应矩存在。</p>
+<p><strong>无偏的含义。</strong>
+无偏不表示每次估计都等于真值，也不表示这一次误差很小。它说在相同数据生成规则下反复抽样，估计量的平均为真参数。若
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>ε</mi><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>m</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>≠</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">E(\varepsilon\mid X)=m(X)\ne0</annotation></semantics></math></span>，则条件偏差为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>m</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">A m(X)</annotation></semantics></math></span>；它也可能偶然为零，但
+A.2 提供统一的充分条件。</p>
+<h2 id="example-a">例题 A：编辑铺垫</h2>
+<p>仅含截距，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">n=3</annotation></semantics></math></span>，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mi>i</mi></msub><mo>=</mo><mi>β</mi><mo>+</mo><msub><mi>ε</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">Y_i=\beta+\varepsilon_i</annotation></semantics></math></span>。写出
+OLS 的误差分解；先在
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>ε</mi><mi>i</mi></msub><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">E(\varepsilon_i\mid X)=0</annotation></semantics></math></span>
+下求均值，再改为每个条件均值都为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math></span>。</p>
+<h2 id="answer-a">A 解答</h2>
+<details>
+<summary>
+查看示范解答
+</summary>
+<p><span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>3</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>3</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>3</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">A=(1/3,1/3,1/3)</annotation></semantics></math></span>，所以
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>=</mo><mi>β</mi><mo>+</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>ε</mi><mn>1</mn></msub><mo>+</mo><msub><mi>ε</mi><mn>2</mn></msub><mo>+</mo><msub><mi>ε</mi><mn>3</mn></msub><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">\widehat\beta=\beta+(\varepsilon_1+\varepsilon_2+\varepsilon_3)/3</annotation></semantics></math></span>。零条件均值时，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>β</mi></mrow><annotation encoding="application/x-tex">E(\widehat\beta\mid X)=\beta</annotation></semantics></math></span>。若三个误差条件均值均为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math></span>，平均误差均值也为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math></span>，于是条件均值为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>+</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\beta+2</annotation></semantics></math></span>。改变误差方差不影响这一步，改变条件均值才直接改变它。</p>
+</details>
+<h2 id="practice-b">练习 B：补充练习</h2><p class="source-label">新增练习 · 沿用本课 A 已示范的同一方法，练习条件识别、计算或证明中的关键动作。</p><p>仅含截距、<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">n=4</annotation></semantics></math></span>，四个误差条件均值分别为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>,</mo><mi>−</mi><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>−</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">1,-1,2,-2</annotation></semantics></math></span>。求
+OLS 条件偏差，并说明本例是否满足 A.2、无偏是否能反推出 A.2。</p><div class="practice-controls" data-question-id="C2B016" data-module-id="C2M016" data-mode="guided" data-answer-anchor="answer-b"></div><h2 id="answer-b">B 解答</h2>
+<details>
+<summary>
+查看参考解
+</summary>
+<p><span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>4</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>4</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>4</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>4</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">A=(1/4,1/4,1/4,1/4)</annotation></semantics></math></span>，条件偏差为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mn>1</mn><mo>+</mo><mn>2</mn><mo>−</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>4</mn><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">(1-1+2-2)/4=0</annotation></semantics></math></span>，所以这一个设计中的截距估计仍条件无偏。但各个误差条件均值并不都为零，A.2
+不成立。无偏可由投影后的均值抵消而偶然出现，不能反推作为充分条件的
+A.2。</p>
+</details>
+<h2 id="summary">一句小结</h2>
+<p>先写
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>β</mi><mo>=</mo><mi>A</mi><mi>ε</mi></mrow><annotation encoding="application/x-tex">\widehat\beta-\beta=A\varepsilon</annotation></semantics></math></span>，A.2
+再把其条件均值归零；无需同方差或正态性。</p>
+</article></div><footer>网站版本 0.1.0 · 记录保存在当前浏览器。请固定使用同一地址与浏览器，并定期导出备份。</footer></main><script type="module" src="runtime/app.js"></script></body></html>

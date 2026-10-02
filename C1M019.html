@@ -1,0 +1,76 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="application-version" content="0.1.0"><title>正确均值设定怎样连接真实函数与投影 · 回归分析 · 从直觉到推导</title><style>:root { color-scheme:light; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; color:#26342f; background:#f6f7f3; }
+* { box-sizing:border-box; } body { margin:0; font-size:17px; line-height:1.9; }
+.sheet { width:min(900px,calc(100% - 32px)); margin:30px auto; padding:32px 48px 42px; background:#fff; border:1px solid #e0e5dc; border-radius:12px; }
+nav { display:flex; flex-wrap:wrap; gap:12px 22px; padding-bottom:16px; border-bottom:1px solid #e1e6df; font-size:14px; }
+h1 { font-size:1.8rem; line-height:1.45; margin:27px 0 20px; } h2 { font-size:1.3rem; margin:36px 0 16px; } h3 { font-size:1.1rem; }
+p,ul,ol,table { margin:15px 0; } li+li { margin-top:7px; } a { color:#246a50; text-underline-offset:3px; }
+blockquote { margin:22px 0; padding:5px 20px; background:#f1f6f0; border-left:3px solid #7c9f77; }
+details { border:1px solid #d8e0d4; border-radius:8px; margin:16px 0 24px; padding:0 18px; background:#fcfdfb; } summary { cursor:pointer; padding:13px 0; color:#315b41; font-weight:600; } details[open] { padding-bottom:12px; }
+table { border-collapse:collapse; width:100%; font-size:.96em; display:block; overflow-x:auto; } th,td { border:1px solid #dce3d8; padding:10px 13px; text-align:left; vertical-align:top; } th { background:#f2f5ef; }
+math { font-family:math; font-size:1.04em; } .math-display { overflow-x:auto; padding:8px 2px; margin:20px 0; } .math-display math { margin:0 auto; }
+code { overflow-wrap:anywhere; } pre { overflow:auto; } img,svg { max-width:100%; height:auto; } .source-label,footer { color:#66736b; font-size:14px; } footer { margin-top:36px; padding-top:15px; border-top:1px solid #e1e6df; }
+@media(max-width:620px) { body { font-size:16px; } .sheet { width:calc(100% - 16px); margin:8px auto; padding:20px 18px 28px; } h1 { font-size:1.5rem; } th,td { padding:8px; } }
+</style><link rel="stylesheet" href="runtime/app.css"></head><body><main class="sheet"><header class="brand-bar"><span class="brand-mark" aria-hidden="true">β</span><span class="brand-name">回归分析学习室</span><span class="brand-sub">LEARN · REASON · PRACTICE</span></header><nav aria-label="课程导航"><a href="index.html">继续学习</a><a href="index.html?view=exercises">材料习题</a><a href="index.html?view=progress">目录与进度</a></nav><p id="save-status" role="status"></p><div id="runtime-error" class="runtime-error" role="alert" hidden></div><div id="app-view"><article id="lesson-content" data-module-id="C1M019"><h1
+id="正确均值设定怎样连接真实函数与投影">正确均值设定怎样连接真实函数与投影</h1>
+<p>来源：Chapter 1，PDF 第 24–25
+页。目标：用零条件均值证明真实参数等于投影系数。</p>
+<h2 id="orientation">这一步要做什么</h2>
+<p>用零条件均值证明真实参数等于投影系数。本课的 A 先示范完整动作，B
+再用相同方法练习；可以先在纸上作答，再展开答案。</p>
+<h2 id="method">概念与方法</h2>
+<p><strong>定义 1.13。</strong> 若存在
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mn>0</mn></msub><mo>∈</mo><msup><mi mathvariant="double-struck">ℝ</mi><mi>k</mi></msup></mrow><annotation encoding="application/x-tex">\beta_0\in\mathbb R^k</annotation></semantics></math></span>，使
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msubsup><mi>β</mi><mn>0</mn><mo>′</mo></msubsup><mi>X</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">E(Y\mid X)=\beta_0&#39;X,</annotation></semantics></math></div>
+则线性模型对条件均值正确设定；若不存在这样的参数，则对条件均值误设。等式通常按
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math></span>
+的分布“几乎处处”理解，即允许在总体概率为零的点上有不同版本。课件写“所有
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math></span>
+值”，在确定了支持集上的连续版本时可以这样检验，但不能凭分布外取值判误设。</p>
+<p><strong>定理 1.14。</strong> 若均值设定正确，并有定理 1.10
+的矩与非奇异条件，则可写
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>=</mo><msubsup><mi>β</mi><mn>0</mn><mo>′</mo></msubsup><mi>X</mi><mo>+</mo><mi>ε</mi><mo>,</mo><mspace width="1.0em"></mspace><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>ε</mi><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>β</mi><mn>0</mn></msub><mo>=</mo><msup><mi>β</mi><mo>*</mo></msup><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><msup><mi>X</mi><mo>′</mo></msup><mo stretchy="false" form="postfix">)</mo><msup><mo stretchy="false" form="postfix">]</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mi>Y</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">Y=\beta_0&#39;X+\varepsilon,\quad E(\varepsilon\mid X)=0,\quad\beta_0=\beta^*=[E(XX&#39;)]^{-1}E(XY).</annotation></semantics></math></div>
+<strong>完整证明。</strong> 定义
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi><mo>=</mo><mi>Y</mi><mo>−</mo><msubsup><mi>β</mi><mn>0</mn><mo>′</mo></msubsup><mi>X</mi></mrow><annotation encoding="application/x-tex">\varepsilon=Y-\beta_0&#39;X</annotation></semantics></math></span>。正确设定给出条件误差均值为零；它蕴含
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mi>ε</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">E(X\varepsilon)=0</annotation></semantics></math></span>；由上一课等价定理得到
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mn>0</mn></msub><mo>=</mo><msup><mi>β</mi><mo>*</mo></msup></mrow><annotation encoding="application/x-tex">\beta_0=\beta^*</annotation></semantics></math></span>。反过来，仅有
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>=</mo><msup><mi>β</mi><mo>*</mo></msup></mrow><annotation encoding="application/x-tex">\beta=\beta^*</annotation></semantics></math></span>
+并不提供第一个条件均值等式。</p>
+<p>正确均值设定把统计投影系数连到条件均值函数的参数。若非恒定特征本身就是原始解释变量，斜率可解释为其他变量固定时的条件均值变化率；若特征含平方项，须对整个函数求导。即使均值正确，因果解释仍需要额外研究设计与识别假设，不能把“给定信息后的关系”自动理解为干预效应。</p>
+<h2 id="example-a">例题 A</h2>
+<p>补充示范：<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo>∣</mo><mi>W</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>2</mn><mo>+</mo><mn>3</mn><mi>W</mi></mrow><annotation encoding="application/x-tex">E(Y\mid W)=2+3W</annotation></semantics></math></span>，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Var</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>W</mi><mo stretchy="false" form="postfix">)</mo><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\operatorname{Var}(W)&gt;0</annotation></semantics></math></span>，相关二阶矩有限。用
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mi>W</mi><msup><mo stretchy="false" form="postfix">)</mo><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">X=(1,W)&#39;</annotation></semantics></math></span>
+做最佳线性预测，求系数，并说明异方差是否改变答案。</p>
+<h2 id="answer-a">A 解答</h2>
+<details>
+<summary>
+查看示范解答
+</summary>
+<p>条件均值已在线性函数类中，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mn>0</mn></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo>,</mo><mn>3</mn><msup><mo stretchy="false" form="postfix">)</mo><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">\beta_0=(2,3)&#39;</annotation></semantics></math></span>。由定理，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>β</mi><mo>*</mo></msup><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">\beta^*=\beta_0</annotation></semantics></math></span>。即使条件方差依赖
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>W</mi><annotation encoding="application/x-tex">W</annotation></semantics></math></span>，只要给定的均值等式及矩条件仍成立，答案仍不变；定理未要求同方差。</p>
+</details>
+<h2 id="practice-b">练习 B</h2><p class="source-label">新增练习 · 编辑配套练习；训练本课 A 已示范的核心动作。</p><p>补充练习：<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>=</mo><mn>1</mn><mo>−</mo><mn>2</mn><mi>W</mi><mo>+</mo><mi>ε</mi></mrow><annotation encoding="application/x-tex">Y=1-2W+\varepsilon</annotation></semantics></math></span>，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>ε</mi><mo>∣</mo><mi>W</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">E(\varepsilon\mid W)=0</annotation></semantics></math></span>，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Var</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>ε</mi><mo>∣</mo><mi>W</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn><mo>+</mo><msup><mi>W</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\operatorname{Var}(\varepsilon\mid W)=1+W^2</annotation></semantics></math></span>，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Var</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>W</mi><mo stretchy="false" form="postfix">)</mo><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\operatorname{Var}(W)&gt;0</annotation></semantics></math></span>
+且
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>W</mi><mn>2</mn></msup><mo stretchy="false" form="postfix">)</mo><mo>&lt;</mo><mi>∞</mi></mrow><annotation encoding="application/x-tex">E(W^2)&lt;\infty</annotation></semantics></math></span>。求真实均值参数与最佳线性系数，并说明依据。</p><div class="practice-controls" data-question-id="C1B019" data-module-id="C1M019" data-mode="guided" data-answer-anchor="answer-b"></div><h2 id="answer-b">B 解答</h2>
+<details>
+<summary>
+完成后查看参考解
+</summary>
+<p>条件期望给出
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo>∣</mo><mi>W</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn><mo>−</mo><mn>2</mn><mi>W</mi></mrow><annotation encoding="application/x-tex">E(Y\mid W)=1-2W</annotation></semantics></math></span>，所以真实参数为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mi>−</mi><mn>2</mn><msup><mo stretchy="false" form="postfix">)</mo><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">(1,-2)&#39;</annotation></semantics></math></span>。误差条件二阶矩有限的总体平均为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>+</mo><mi>E</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>W</mi><mn>2</mn></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">1+E(W^2)</annotation></semantics></math></span>，因此相关二阶矩存在；特征方差正保证非奇异。由定理
+1.14，最佳线性系数也为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mi>−</mi><mn>2</mn><msup><mo stretchy="false" form="postfix">)</mo><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">(1,-2)&#39;</annotation></semantics></math></span>。</p>
+</details>
+<h2 id="summary">一句小结</h2>
+<p>正确均值设定加上矩与非奇异条件，使真实条件均值参数等于最佳线性投影系数。</p>
+<details class="prepared-review"><summary>精选回顾（回看不记分）</summary><h2 id="review">精选回顾</h2><p>“线性回归模型均值正确设定”的数学含义是什么？</p><h2 id="review-answer">回顾答案</h2><details>
+<summary>
+回忆后查看
+</summary>
+<p>存在一个常系数向量
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\beta_0</annotation></semantics></math></span>，使
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msubsup><mi>β</mi><mn>0</mn><mo>′</mo></msubsup><mi>X</mi></mrow><annotation encoding="application/x-tex">E(Y\mid X)=\beta_0&#39;X</annotation></semantics></math></span>
+几乎处处成立；等价地，相应误差满足
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>ε</mi><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">E(\varepsilon\mid X)=0</annotation></semantics></math></span>。在非奇异矩条件下，这个参数就是投影系数。</p>
+</details></details></article></div><footer>网站版本 0.1.0 · 记录保存在当前浏览器。请固定使用同一地址与浏览器，并定期导出备份。</footer></main><script type="module" src="runtime/app.js"></script></body></html>

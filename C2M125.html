@@ -1,0 +1,122 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="application-version" content="0.1.0"><title>按假设选择能引用的结论 · 回归分析 · 从直觉到推导</title><style>:root { color-scheme:light; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; color:#26342f; background:#f6f7f3; }
+* { box-sizing:border-box; } body { margin:0; font-size:17px; line-height:1.9; }
+.sheet { width:min(900px,calc(100% - 32px)); margin:30px auto; padding:32px 48px 42px; background:#fff; border:1px solid #e0e5dc; border-radius:12px; }
+nav { display:flex; flex-wrap:wrap; gap:12px 22px; padding-bottom:16px; border-bottom:1px solid #e1e6df; font-size:14px; }
+h1 { font-size:1.8rem; line-height:1.45; margin:27px 0 20px; } h2 { font-size:1.3rem; margin:36px 0 16px; } h3 { font-size:1.1rem; }
+p,ul,ol,table { margin:15px 0; } li+li { margin-top:7px; } a { color:#246a50; text-underline-offset:3px; }
+blockquote { margin:22px 0; padding:5px 20px; background:#f1f6f0; border-left:3px solid #7c9f77; }
+details { border:1px solid #d8e0d4; border-radius:8px; margin:16px 0 24px; padding:0 18px; background:#fcfdfb; } summary { cursor:pointer; padding:13px 0; color:#315b41; font-weight:600; } details[open] { padding-bottom:12px; }
+table { border-collapse:collapse; width:100%; font-size:.96em; display:block; overflow-x:auto; } th,td { border:1px solid #dce3d8; padding:10px 13px; text-align:left; vertical-align:top; } th { background:#f2f5ef; }
+math { font-family:math; font-size:1.04em; } .math-display { overflow-x:auto; padding:8px 2px; margin:20px 0; } .math-display math { margin:0 auto; }
+code { overflow-wrap:anywhere; } pre { overflow:auto; } img,svg { max-width:100%; height:auto; } .source-label,footer { color:#66736b; font-size:14px; } footer { margin-top:36px; padding-top:15px; border-top:1px solid #e1e6df; }
+@media(max-width:620px) { body { font-size:16px; } .sheet { width:calc(100% - 16px); margin:8px auto; padding:20px 18px 28px; } h1 { font-size:1.5rem; } th,td { padding:8px; } }
+</style><link rel="stylesheet" href="runtime/app.css"></head><body><main class="sheet"><header class="brand-bar"><span class="brand-mark" aria-hidden="true">β</span><span class="brand-name">回归分析学习室</span><span class="brand-sub">LEARN · REASON · PRACTICE</span></header><nav aria-label="课程导航"><a href="index.html">继续学习</a><a href="index.html?view=exercises">材料习题</a><a href="index.html?view=progress">目录与进度</a></nav><p id="save-status" role="status"></p><div id="runtime-error" class="runtime-error" role="alert" hidden></div><div id="app-view"><article id="lesson-content" data-module-id="C2M125"><h1 id="按假设选择能引用的结论">按假设选择能引用的结论</h1>
+<p>来源：Chapter 2: Classical Linear Regression Models，PDF 第
+44；回顾24–43
+页。目标：给定假设后，只调用有依据的估计性质或检验分布。</p>
+<h2 id="method">定义、条件与方法</h2>
+<p>这一章的主线不是背下所有公式，而是辨认每个结论依赖什么。本步把原讲义最后的表格变成可用的判断流程。</p>
+<p><strong>假设短回顾。</strong> A.1 是参数线性的模型
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>=</mo><mi>X</mi><mi>β</mi><mo>+</mo><mi>ε</mi></mrow><annotation encoding="application/x-tex">Y=X\beta+\varepsilon</annotation></semantics></math></span>；A.2
+是对整张
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math></span>
+的零条件均值；A.3 是有限样本满列秩；A.4 是共同条件方差且误差不相关；A.5
+是球形条件正态，已蕴含 A.2、A.4；A.5* 是已知正定 V
+形状下的一般条件正态。精确残差方差和 t/F 还要求
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>&gt;</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">n&gt;k</annotation></semantics></math></span>；限制矩阵必须满行秩。</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>讲义条件组合</th>
+<th>可以得到的结论</th>
+<th>仍不能自动声称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A.1 + A.3</td>
+<td>OLS
+唯一，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi>X</mi><mo>′</mo></msup><mi>Y</mi></mrow><annotation encoding="application/x-tex">\widehat\beta=(X&#39;X)^{-1}X&#39;Y</annotation></semantics></math></span></td>
+<td>无偏、经典方差或精确检验</td>
+</tr>
+<tr>
+<td>A.1–A.3</td>
+<td>OLS 条件无偏；相应矩存在时无条件无偏</td>
+<td>球形方差、BLUE</td>
+</tr>
+<tr>
+<td>A.1–A.4</td>
+<td>条件方差
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\sigma^2(X&#39;X)^{-1}</annotation></semantics></math></span>，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>s</mi><mn>2</mn></msup><annotation encoding="application/x-tex">s^2</annotation></semantics></math></span>
+无偏，OLS 为 BLUE</td>
+<td>精确正态、卡方、t/F，或仅凭不相关推出独立</td>
+</tr>
+<tr>
+<td>A.1 + A.3 + A.5</td>
+<td>精确条件正态与残差卡方，系数与残差方差条件独立，精确 t/F</td>
+<td>对任意估计量、任意模型的普遍最优</td>
+</tr>
+<tr>
+<td>A.1 + A.3 + A.5*</td>
+<td>OLS 无偏且条件正态，一般三明治方差；已知 V 时 GLS 为 BLUE
+并恢复精确推断</td>
+<td>一般 OLS 系数与残差不相关，或 FGLS 自动精确 t/F</td>
+</tr>
+</tbody>
+</table>
+<p><strong>怎样使用这张表。</strong>
+第一问“估计量是否可计算”，看满列秩；第二问“中心是否在真值”，看外生性；第三问“方差公式与效率是否正确”，看误差协方差；第四问“有限样本参考分布是否精确”，看正态性与独立比值结构。不能从样本内正规方程反推外生性，也不能从较高
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math></span>
+反推正确模型。</p>
+<p><strong>把全章连起来。</strong> OLS
+几何给出投影与残差空间；矩条件给出无偏与
+BLUE；正态性把空间方向变成可计算的分布；t/F
+将经济限制变成检验；已知非球形协方差通过白化把同一套逻辑搬到
+GLS。未知协方差的实际估计进入另一个需要额外理论的层次。</p>
+<p>本网站明确修正了第 40 页定理 2.18(4)，见<a
+href="C2M121.html#method">一般 V
+下的反例</a>。讲义并未提供未知协方差时所有大样本方法，因此这里只说明需要继续建立的理论条件，不冒称已经完成这些后续理论。</p>
+<h2 id="example-a">例题 A</h2>
+<p>有人说：“X 满列秩，所以算出的 OLS 一定无偏，而且按软件显示的 t
+值就有精确 t 检验。”请按表指出这句话跨越了哪些未经验证的条件。</p>
+<h2 id="answer-a">A 解答</h2>
+<details>
+<summary>
+查看示范解答
+</summary>
+<p>满列秩只保证 OLS 公式唯一可计算。无偏还需模型与零条件均值，即
+A.1、A.2；经典方差和 BLUE 还需 A.4；精确 t 推断需要 A.5
+的球形条件正态以及
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>&gt;</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">n&gt;k</annotation></semantics></math></span>，并检验非零线性组合。软件能输出数值只证明进行了计算，不替代这些条件。</p>
+</details>
+<h2 id="practice-b">练习 B</h2><p class="source-label">新增练习 · 练习本课 A 已示范的同一判断、计算或证明动作。</p><p>（补充练习）已知模型参数线性、X 满列秩，且
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi><mo>∣</mo><mi>X</mi><mo>∼</mo><mi>N</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><msup><mi>σ</mi><mn>2</mn></msup><mi>V</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\varepsilon\mid X\sim N(0,\sigma^2V)</annotation></semantics></math></span>，V
+已知正定但不是单位矩阵。分别判断：OLS 是否无偏、是否必为 BLUE、经典 OLS
+精确 t 是否可直接用、GLS 是否能恢复精确推断。</p><div class="practice-controls" data-question-id="C2B125" data-module-id="C2M125" data-mode="guided" data-answer-anchor="answer-b"></div><h2 id="answer-b">B 解答</h2>
+<details>
+<summary>
+查看参考解
+</summary>
+<p>A.5* 给出零条件均值，所以 OLS 无偏；但一般非球形 V 下 OLS 不必
+BLUE。经典方差
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\sigma^2(X&#39;X)^{-1}</annotation></semantics></math></span>
+通常错误，因此不能直接用原球形 OLS t 检验。已知 V 后可白化，用 GLS
+和变换模型的
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>s</mi><mo>*</mo><mn>2</mn></msubsup><mo>,</mo><msub><mi>Q</mi><mo>*</mo></msub></mrow><annotation encoding="application/x-tex">s_*^2,Q_*</annotation></semantics></math></span>；在
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>&gt;</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">n&gt;k</annotation></semantics></math></span>
+等条件下能恢复精确 t/F。若特殊 V 恰满足额外结构，OLS
+也可能有效，但不能由当前假设普遍断言。</p>
+</details>
+<h2 id="summary">一句小结</h2>
+<p>引用一个回归结论时，同时写出它所依赖的假设；能算、无偏、有效与精确推断是不同层次。</p>
+<details class="prepared-review"><summary>精选回顾（回看不记分）</summary><h2 id="review">精选回顾</h2><p>从唯一可计算到精确检验，依次需要回答哪四类问题？</p><h2 id="review-answer">回顾答案</h2><details>
+<summary>
+回忆后查看
+</summary>
+<p>设计矩阵是否满列秩；误差条件均值是否为零；真实协方差是否支持所用方差与效率结论；是否存在正态与独立卡方结构支持有限样本精确分布。每层需要自己的条件，前一层不自动推出后一层。</p>
+</details></details></article></div><footer>网站版本 0.1.0 · 记录保存在当前浏览器。请固定使用同一地址与浏览器，并定期导出备份。</footer></main><script type="module" src="runtime/app.js"></script></body></html>

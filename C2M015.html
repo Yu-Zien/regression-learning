@@ -1,0 +1,91 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="application-version" content="0.1.0"><title>用自由度解释调整后 R² 会升也会降 · 回归分析 · 从直觉到推导</title><style>:root { color-scheme:light; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; color:#26342f; background:#f6f7f3; }
+* { box-sizing:border-box; } body { margin:0; font-size:17px; line-height:1.9; }
+.sheet { width:min(900px,calc(100% - 32px)); margin:30px auto; padding:32px 48px 42px; background:#fff; border:1px solid #e0e5dc; border-radius:12px; }
+nav { display:flex; flex-wrap:wrap; gap:12px 22px; padding-bottom:16px; border-bottom:1px solid #e1e6df; font-size:14px; }
+h1 { font-size:1.8rem; line-height:1.45; margin:27px 0 20px; } h2 { font-size:1.3rem; margin:36px 0 16px; } h3 { font-size:1.1rem; }
+p,ul,ol,table { margin:15px 0; } li+li { margin-top:7px; } a { color:#246a50; text-underline-offset:3px; }
+blockquote { margin:22px 0; padding:5px 20px; background:#f1f6f0; border-left:3px solid #7c9f77; }
+details { border:1px solid #d8e0d4; border-radius:8px; margin:16px 0 24px; padding:0 18px; background:#fcfdfb; } summary { cursor:pointer; padding:13px 0; color:#315b41; font-weight:600; } details[open] { padding-bottom:12px; }
+table { border-collapse:collapse; width:100%; font-size:.96em; display:block; overflow-x:auto; } th,td { border:1px solid #dce3d8; padding:10px 13px; text-align:left; vertical-align:top; } th { background:#f2f5ef; }
+math { font-family:math; font-size:1.04em; } .math-display { overflow-x:auto; padding:8px 2px; margin:20px 0; } .math-display math { margin:0 auto; }
+code { overflow-wrap:anywhere; } pre { overflow:auto; } img,svg { max-width:100%; height:auto; } .source-label,footer { color:#66736b; font-size:14px; } footer { margin-top:36px; padding-top:15px; border-top:1px solid #e1e6df; }
+@media(max-width:620px) { body { font-size:16px; } .sheet { width:calc(100% - 16px); margin:8px auto; padding:20px 18px 28px; } h1 { font-size:1.5rem; } th,td { padding:8px; } }
+</style><link rel="stylesheet" href="runtime/app.css"></head><body><main class="sheet"><header class="brand-bar"><span class="brand-mark" aria-hidden="true">β</span><span class="brand-name">回归分析学习室</span><span class="brand-sub">LEARN · REASON · PRACTICE</span></header><nav aria-label="课程导航"><a href="index.html">继续学习</a><a href="index.html?view=exercises">材料习题</a><a href="index.html?view=progress">目录与进度</a></nav><p id="save-status" role="status"></p><div id="runtime-error" class="runtime-error" role="alert" hidden></div><div id="app-view"><article id="lesson-content" data-module-id="C2M015"><h1 id="用自由度解释调整后-r²-会升也会降">用自由度解释调整后 R²
+会升也会降</h1>
+<p>来源：Chapter 2: Classical Linear Regression Models，PDF 第 18
+页。目标：证明新增解释变量不会降低普通 R²，并计算调整后指标。</p>
+<h2 id="method">讲解与方法</h2>
+<p>拟合比例越高未必模型越好，因为增加参数会让模型更容易贴近这份样本。本课先证明这个机械效应，再加入自由度惩罚。</p>
+<p><strong>增加解释变量。</strong> 保持同一个
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math></span>、同一批观测与同一权重，若新模型保留全部旧列，只增加新列，旧模型的拟合向量仍可用（新系数设零）。因此新模型的最小
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>S</mi><mi>S</mi></mrow><annotation encoding="application/x-tex">RSS</annotation></semantics></math></span>
+不可能大于旧模型。<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mi>S</mi><mi>S</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">TSS&gt;0</annotation></semantics></math></span>
+且使用同一中心化分母时，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>R</mi><mn>2</mn></msup><mo>=</mo><mn>1</mn><mo>−</mo><mi>R</mi><mi>S</mi><mi>S</mi><mi>/</mi><mi>T</mi><mi>S</mi><mi>S</mi></mrow><annotation encoding="application/x-tex">R^2=1-RSS/TSS</annotation></semantics></math></span>
+不会下降。若比较的样本因缺失值而变化，这个论证失去“同一目标”的前提。</p>
+<p><strong>调整后的决定系数。</strong>
+含截距、<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>&gt;</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">n&gt;k</annotation></semantics></math></span>、<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mi>S</mi><mi>S</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">TSS&gt;0</annotation></semantics></math></span>
+时定义
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mover><mi>R</mi><mo accent="true">¯</mo></mover><mn>2</mn></msup><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mrow><mi>R</mi><mi>S</mi><mi>S</mi><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mi>T</mi><mi>S</mi><mi>S</mi><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow><mrow><mi>n</mi><mo>−</mo><mi>k</mi></mrow></mfrac><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>R</mi><mn>2</mn></msup><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\overline R^2=1-\frac{RSS/(n-k)}{TSS/(n-1)}=1-\frac{n-1}{n-k}(1-R^2).</annotation></semantics></math></div>
+分子按残差自由度平均，分母按中心化后
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n-1</annotation></semantics></math></span>
+个方向平均。由于
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">(n-1)/(n-k)\ge1</annotation></semantics></math></span>，有
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mover><mi>R</mi><mo accent="true">¯</mo></mover><mn>2</mn></msup><mo>≤</mo><msup><mi>R</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\overline R^2\le R^2</annotation></semantics></math></span>，且调整后指标可以为负。它不是一个总在
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0,1]</annotation></semantics></math></span>
+的比例。</p>
+<p>增加一列使
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math></span>
+变为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">k+1</annotation></semantics></math></span>
+时，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>S</mi><mi>S</mi></mrow><annotation encoding="application/x-tex">RSS</annotation></semantics></math></span>
+会降但分母
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>−</mo><mi>k</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n-k-1</annotation></semantics></math></span>
+也降；调整后指标上升恰好要求
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>R</mi><mi>S</mi><msub><mi>S</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">w</mi></mrow></msub></mrow><mrow><mi>n</mi><mo>−</mo><mi>k</mi><mo>−</mo><mn>1</mn></mrow></mfrac><mo>&lt;</mo><mfrac><mrow><mi>R</mi><mi>S</mi><msub><mi>S</mi><mrow><mi mathvariant="normal">o</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">d</mi></mrow></msub></mrow><mrow><mi>n</mi><mo>−</mo><mi>k</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{RSS_{\mathrm{new}}}{n-k-1}&lt;\frac{RSS_{\mathrm{old}}}{n-k}.</annotation></semantics></math></div>
+所以需要拟合改善足以补偿自由度消耗。高
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math></span>
+本身不能证明外生性、因果关系、正确设定或样本外预测能力；这些都超出这个代数量的保证范围。</p>
+<h2 id="example-a">例题 A：编辑铺垫</h2>
+<p>同一含截距样本
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>10</mn><mo>,</mo><mi>T</mi><mi>S</mi><mi>S</mi><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">n=10,TSS=100</annotation></semantics></math></span>。旧模型
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>2</mn><mo>,</mo><mi>R</mi><mi>S</mi><mi>S</mi><mo>=</mo><mn>40</mn></mrow><annotation encoding="application/x-tex">k=2,RSS=40</annotation></semantics></math></span>；增加一列后
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>3</mn><mo>,</mo><mi>R</mi><mi>S</mi><mi>S</mi><mo>=</mo><mn>39</mn></mrow><annotation encoding="application/x-tex">k=3,RSS=39</annotation></semantics></math></span>。计算两种
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math></span>，解释方向不同。</p>
+<h2 id="answer-a">A 解答</h2>
+<details>
+<summary>
+查看示范解答
+</summary>
+<p>普通指标从
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mn>40</mn><mi>/</mi><mn>100</mn><mo>=</mo><mn>0.60</mn></mrow><annotation encoding="application/x-tex">1-40/100=0.60</annotation></semantics></math></span>
+升到
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mn>39</mn><mi>/</mi><mn>100</mn><mo>=</mo><mn>0.61</mn></mrow><annotation encoding="application/x-tex">1-39/100=0.61</annotation></semantics></math></span>。调整后旧值为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mo stretchy="false" form="prefix">(</mo><mn>40</mn><mi>/</mi><mn>8</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>100</mn><mi>/</mi><mn>9</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.55</mn></mrow><annotation encoding="application/x-tex">1-(40/8)/(100/9)=0.55</annotation></semantics></math></span>，新值为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mo stretchy="false" form="prefix">(</mo><mn>39</mn><mi>/</mi><mn>7</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>100</mn><mi>/</mi><mn>9</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>349</mn><mi>/</mi><mn>700</mn><mo>≈</mo><mn>0.499</mn></mrow><annotation encoding="application/x-tex">1-(39/7)/(100/9)=349/700\approx0.499</annotation></semantics></math></span>。虽然总残差下降，但每个残差自由度平均的平方和由
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>5</mn><annotation encoding="application/x-tex">5</annotation></semantics></math></span>
+升到
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>39</mn><mi>/</mi><mn>7</mn></mrow><annotation encoding="application/x-tex">39/7</annotation></semantics></math></span>，因此调整后指标下降。</p>
+</details>
+<h2 id="practice-b">练习 B：补充练习</h2><p class="source-label">新增练习 · 沿用本课 A 已示范的同一方法，练习条件识别、计算或证明中的关键动作。</p><p>保持
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>10</mn><mo>,</mo><mi>T</mi><mi>S</mi><mi>S</mi><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">n=10,TSS=100</annotation></semantics></math></span>，旧模型仍为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>2</mn><mo>,</mo><mi>R</mi><mi>S</mi><mi>S</mi><mo>=</mo><mn>40</mn></mrow><annotation encoding="application/x-tex">k=2,RSS=40</annotation></semantics></math></span>，新模型
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>3</mn><mo>,</mo><mi>R</mi><mi>S</mi><mi>S</mi><mo>=</mo><mn>30</mn></mrow><annotation encoding="application/x-tex">k=3,RSS=30</annotation></semantics></math></span>。计算两种指标并判断调整后指标是否上升。</p><div class="practice-controls" data-question-id="C2B015" data-module-id="C2M015" data-mode="guided" data-answer-anchor="answer-b"></div><h2 id="answer-b">B 解答</h2>
+<details>
+<summary>
+查看参考解
+</summary>
+<p>旧普通
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>R</mi><mn>2</mn></msup><mo>=</mo><mn>0.60</mn></mrow><annotation encoding="application/x-tex">R^2=0.60</annotation></semantics></math></span>，新普通
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>R</mi><mn>2</mn></msup><mo>=</mo><mn>0.70</mn></mrow><annotation encoding="application/x-tex">R^2=0.70</annotation></semantics></math></span>。旧调整后为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.55</mn><annotation encoding="application/x-tex">0.55</annotation></semantics></math></span>；新调整后为
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mfrac><mrow><mn>30</mn><mi>/</mi><mn>7</mn></mrow><mrow><mn>100</mn><mi>/</mi><mn>9</mn></mrow></mfrac><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mn>27</mn><mn>70</mn></mfrac><mo>=</mo><mfrac><mn>43</mn><mn>70</mn></mfrac><mo>≈</mo><mn>0.6143</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">1-\frac{30/7}{100/9}=1-\frac{27}{70}=\frac{43}{70}\approx0.6143.</annotation></semantics></math></div>
+因为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mi>/</mi><mn>7</mn><mo>&lt;</mo><mn>40</mn><mi>/</mi><mn>8</mn><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">30/7&lt;40/8=5</annotation></semantics></math></span>，拟合改进补偿了失去的一个自由度，所以调整后指标也上升。</p>
+</details>
+<h2 id="summary">一句小结</h2>
+<p>加列总能保留旧拟合，普通
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math></span>
+因而不降；调整后
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math></span>
+还要支付参数的自由度成本。</p>
+</article></div><footer>网站版本 0.1.0 · 记录保存在当前浏览器。请固定使用同一地址与浏览器，并定期导出备份。</footer></main><script type="module" src="runtime/app.js"></script></body></html>

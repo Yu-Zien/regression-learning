@@ -1,0 +1,103 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="application-version" content="0.1.0"><title>由最弱信息方向增长证明 OLS 一致 · 回归分析 · 从直觉到推导</title><style>:root { color-scheme:light; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; color:#26342f; background:#f6f7f3; }
+* { box-sizing:border-box; } body { margin:0; font-size:17px; line-height:1.9; }
+.sheet { width:min(900px,calc(100% - 32px)); margin:30px auto; padding:32px 48px 42px; background:#fff; border:1px solid #e0e5dc; border-radius:12px; }
+nav { display:flex; flex-wrap:wrap; gap:12px 22px; padding-bottom:16px; border-bottom:1px solid #e1e6df; font-size:14px; }
+h1 { font-size:1.8rem; line-height:1.45; margin:27px 0 20px; } h2 { font-size:1.3rem; margin:36px 0 16px; } h3 { font-size:1.1rem; }
+p,ul,ol,table { margin:15px 0; } li+li { margin-top:7px; } a { color:#246a50; text-underline-offset:3px; }
+blockquote { margin:22px 0; padding:5px 20px; background:#f1f6f0; border-left:3px solid #7c9f77; }
+details { border:1px solid #d8e0d4; border-radius:8px; margin:16px 0 24px; padding:0 18px; background:#fcfdfb; } summary { cursor:pointer; padding:13px 0; color:#315b41; font-weight:600; } details[open] { padding-bottom:12px; }
+table { border-collapse:collapse; width:100%; font-size:.96em; display:block; overflow-x:auto; } th,td { border:1px solid #dce3d8; padding:10px 13px; text-align:left; vertical-align:top; } th { background:#f2f5ef; }
+math { font-family:math; font-size:1.04em; } .math-display { overflow-x:auto; padding:8px 2px; margin:20px 0; } .math-display math { margin:0 auto; }
+code { overflow-wrap:anywhere; } pre { overflow:auto; } img,svg { max-width:100%; height:auto; } .source-label,footer { color:#66736b; font-size:14px; } footer { margin-top:36px; padding-top:15px; border-top:1px solid #e1e6df; }
+@media(max-width:620px) { body { font-size:16px; } .sheet { width:calc(100% - 16px); margin:8px auto; padding:20px 18px 28px; } h1 { font-size:1.5rem; } th,td { padding:8px; } }
+</style><link rel="stylesheet" href="runtime/app.css"></head><body><main class="sheet"><header class="brand-bar"><span class="brand-mark" aria-hidden="true">β</span><span class="brand-name">回归分析学习室</span><span class="brand-sub">LEARN · REASON · PRACTICE</span></header><nav aria-label="课程导航"><a href="index.html">继续学习</a><a href="index.html?view=exercises">材料习题</a><a href="index.html?view=progress">目录与进度</a></nav><p id="save-status" role="status"></p><div id="runtime-error" class="runtime-error" role="alert" hidden></div><div id="app-view"><article id="lesson-content" data-module-id="C2M024"><h1 id="由最弱信息方向增长证明-ols-一致">由最弱信息方向增长证明 OLS
+一致</h1>
+<p>来源：Chapter 2: Classical Linear Regression Models，PDF 第 9、22
+页。目标：用特征值界与概率界，证明估计误差依概率趋零。</p>
+<h2 id="method">讲解与方法</h2>
+<p>无偏描述有限样本的中心，一致性描述样本越来越多时是否靠近真值。本课用已经得到的均值和方差作完整证明，并说明随机设计时不能随意交换极限与期望。</p>
+<p><strong>定义。</strong> 固定
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math></span>，若对每个
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\delta&gt;0</annotation></semantics></math></span>，
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">{</mo><mo stretchy="false" form="postfix">∥</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>n</mi></msub><mo>−</mo><mi>β</mi><mo stretchy="false" form="postfix">∥</mo><mo>&gt;</mo><mi>δ</mi><mo stretchy="false" form="postfix">}</mo><mo>→</mo><mn>0</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\Pr\{\|\widehat\beta_n-\beta\|&gt;\delta\}\to0,</annotation></semantics></math></div>
+就称 OLS 依概率收敛到
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span>，即一致。条件均方误差为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">[</mo><mo stretchy="false" form="postfix">∥</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>n</mi></msub><mo>−</mo><mi>β</mi><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">E[\|\widehat\beta_n-\beta\|^2\mid X]</annotation></semantics></math></span>；无偏时它等于条件方差矩阵的迹。</p>
+<p><strong>证明的第一步。</strong> 在 A.1、A.2、A.4 与每个有效样本的 A.3
+下，
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mi>n</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>:=</mo><mi>E</mi><mo stretchy="false" form="prefix">[</mo><mo stretchy="false" form="postfix">∥</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>n</mi></msub><mo>−</mo><mi>β</mi><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mrow><mi mathvariant="normal">tr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">q_n(X):=E[\|\widehat\beta_n-\beta\|^2\mid X]=\sigma^2\operatorname{tr}((X&#39;X)^{-1}).</annotation></semantics></math></div>
+逆矩阵的每个特征值不超过
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><msub><mi>λ</mi><mi mathvariant="normal">min</mi></msub><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">1/\lambda_{\min}(X&#39;X)</annotation></semantics></math></span>，因此
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mi>n</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mfrac><mrow><msup><mi>σ</mi><mn>2</mn></msup><mi>k</mi></mrow><mrow><msub><mi>λ</mi><mi mathvariant="normal">min</mi></msub><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">q_n(X)\le\frac{\sigma^2 k}{\lambda_{\min}(X&#39;X)}.</annotation></semantics></math></div>
+由 A.3*，右边依概率趋零；每个参数方向的条件方差也因此消失。</p>
+<p><strong>第二步：把小均方误差变成小尾概率。</strong> 对任何非负随机量
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>W</mi><annotation encoding="application/x-tex">W</annotation></semantics></math></span>，在事件
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo>&gt;</mo><mi>c</mi></mrow><annotation encoding="application/x-tex">W&gt;c</annotation></semantics></math></span>
+上至少贡献
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math></span>，所以
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>W</mi><mo>&gt;</mo><mi>c</mi><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>W</mi><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mi>c</mi></mrow><annotation encoding="application/x-tex">\Pr(W&gt;c)\le E(W)/c</annotation></semantics></math></span>。这是
+Markov 界。条件化后应用于平方误差得
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mo stretchy="false" form="postfix">∥</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>n</mi></msub><mo>−</mo><mi>β</mi><mo stretchy="false" form="postfix">∥</mo><mo>&gt;</mo><mi>δ</mi><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mrow><mi mathvariant="normal">min</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo>,</mo><msub><mi>q</mi><mi>n</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mi>/</mi><msup><mi>δ</mi><mn>2</mn></msup><mo stretchy="false" form="postfix">}</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\Pr(\|\widehat\beta_n-\beta\|&gt;\delta\mid X)\le\min\{1,q_n(X)/\delta^2\}.</annotation></semantics></math></div>
+固定任意
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\eta&gt;0</annotation></semantics></math></span>，在
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mi>n</mi></msub><mo>≤</mo><mi>η</mi></mrow><annotation encoding="application/x-tex">q_n\le\eta</annotation></semantics></math></span>
+的设计上右边至多
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mi>/</mi><msup><mi>δ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\eta/\delta^2</annotation></semantics></math></span>，在其余设计上至多
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math></span>，故
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mo stretchy="false" form="postfix">∥</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>n</mi></msub><mo>−</mo><mi>β</mi><mo stretchy="false" form="postfix">∥</mo><mo>&gt;</mo><mi>δ</mi><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>q</mi><mi>n</mi></msub><mo>&gt;</mo><mi>η</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mfrac><mi>η</mi><msup><mi>δ</mi><mn>2</mn></msup></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\Pr(\|\widehat\beta_n-\beta\|&gt;\delta)\le\Pr(q_n&gt;\eta)+\frac{\eta}{\delta^2}.</annotation></semantics></math></div>
+先让
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>→</mo><mi>∞</mi></mrow><annotation encoding="application/x-tex">n\to\infty</annotation></semantics></math></span>，第一项趋零；再让
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mo>↓</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\eta\downarrow0</annotation></semantics></math></span>，得到一致性。这个论证无需额外假设
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">[</mo><msub><mi>q</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">]</mo><mo>→</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">E[q_n]\to0</annotation></semantics></math></span>，因此不会把条件方差依概率变小误说成无条件均方误差自动趋零。</p>
+<p><strong>反例提醒。</strong> 若
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><mo>=</mo><mrow><mi mathvariant="normal">diag</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">X&#39;X=\operatorname{diag}(n,1)</annotation></semantics></math></span>，第二个条件方差始终为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math></span>。A.3
+每次成立也不足以用此路线推出一致性。若
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math></span>
+随
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math></span>
+增长，本证明中的
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mi>/</mi><msub><mi>λ</mi><mi mathvariant="normal">min</mi></msub></mrow><annotation encoding="application/x-tex">k/\lambda_{\min}</annotation></semantics></math></span>
+也须重新控制，不能直接套固定维结论。</p>
+<h2 id="example-a">例题 A：编辑铺垫</h2>
+<p>固定
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>2</mn><mo>,</mo><msup><mi>σ</mi><mn>2</mn></msup><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">k=2,\sigma^2=3</annotation></semantics></math></span>，非随机设计满足
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><mo>=</mo><mrow><mi mathvariant="normal">diag</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>,</mo><mn>2</mn><mi>n</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">X&#39;X=\operatorname{diag}(n,2n)</annotation></semantics></math></span>。求条件均方误差，并用
+Markov 界给出
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mo stretchy="false" form="postfix">∥</mo><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>β</mi><mo stretchy="false" form="postfix">∥</mo><mo>&gt;</mo><mn>0.5</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\Pr(\|\widehat\beta-\beta\|&gt;0.5)</annotation></semantics></math></span>
+的上界。</p>
+<h2 id="answer-a">A 解答</h2>
+<details>
+<summary>
+查看示范解答
+</summary>
+<p><div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mi>n</mi></msub><mo>=</mo><mn>3</mn><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mi>n</mi><mo>+</mo><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mi>n</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mfrac><mn>9</mn><mrow><mn>2</mn><mi>n</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">q_n=3(1/n+1/(2n))=\frac{9}{2n}.</annotation></semantics></math></div>
+由于设计非随机，条件与无条件在此相同。概率上界为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">min</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo>,</mo><msub><mi>q</mi><mi>n</mi></msub><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>0.5</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo stretchy="false" form="postfix">}</mo><mo>=</mo><mrow><mi mathvariant="normal">min</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo>,</mo><mn>18</mn><mi>/</mi><mi>n</mi><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\min\{1,q_n/(0.5)^2\}=\min\{1,18/n\}</annotation></semantics></math></span>，随
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math></span>
+增大趋零。因此这个阈值下出错概率消失；对任意正阈值同理，得到一致性。</p>
+</details>
+<h2 id="practice-b">练习 B：补充练习</h2><p class="source-label">新增练习 · 沿用本课 A 已示范的同一方法，练习条件识别、计算或证明中的关键动作。</p><p>固定
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>2</mn><mo>,</mo><msup><mi>σ</mi><mn>2</mn></msup><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">k=2,\sigma^2=2</annotation></semantics></math></span>，非随机设计满足
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mo>′</mo></msup><mi>X</mi><mo>=</mo><mrow><mi mathvariant="normal">diag</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>,</mo><msqrt><mi>n</mi></msqrt><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">X&#39;X=\operatorname{diag}(n,\sqrt n)</annotation></semantics></math></span>。求均方误差及
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mo stretchy="false" form="postfix">∥</mo><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>β</mi><mo stretchy="false" form="postfix">∥</mo><mo>&gt;</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\Pr(\|\widehat\beta-\beta\|&gt;1)</annotation></semantics></math></span>
+的上界，判断是否一致。</p><div class="practice-controls" data-question-id="C2B024" data-module-id="C2M024" data-mode="guided" data-answer-anchor="answer-b"></div><h2 id="answer-b">B 解答</h2>
+<details>
+<summary>
+查看参考解
+</summary>
+<p><div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mi>n</mi></msub><mo>=</mo><mn>2</mn><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><mo>+</mo><mfrac><mn>1</mn><msqrt><mi>n</mi></msqrt></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">q_n=2\left(\frac1n+\frac1{\sqrt n}\right).</annotation></semantics></math></div>
+阈值为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math></span>
+时，上界为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">min</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo>,</mo><mn>2</mn><mi>/</mi><mi>n</mi><mo>+</mo><mn>2</mn><mi>/</mi><msqrt><mi>n</mi></msqrt><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\min\{1,2/n+2/\sqrt n\}</annotation></semantics></math></span>，趋于零。对任何
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\delta&gt;0</annotation></semantics></math></span>，再除以
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>δ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\delta^2</annotation></semantics></math></span>
+仍趋零，故一致。第二方向增长较慢，仍因最小特征值
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><mi>n</mi></msqrt><mo>→</mo><mi>∞</mi></mrow><annotation encoding="application/x-tex">\sqrt n\to\infty</annotation></semantics></math></span>
+而获得足够信息。</p>
+</details>
+<h2 id="summary">一句小结</h2>
+<p>固定参数维数时，A.3*
+让所有条件方差方向缩小，再用条件概率界可严谨推出一致性。</p>
+</article></div><footer>网站版本 0.1.0 · 记录保存在当前浏览器。请固定使用同一地址与浏览器，并定期导出备份。</footer></main><script type="module" src="runtime/app.js"></script></body></html>

@@ -1,0 +1,90 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="application-version" content="0.1.0"><title>按原例 2.8 完成左侧检验 · 回归分析 · 从直觉到推导</title><style>:root { color-scheme:light; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; color:#26342f; background:#f6f7f3; }
+* { box-sizing:border-box; } body { margin:0; font-size:17px; line-height:1.9; }
+.sheet { width:min(900px,calc(100% - 32px)); margin:30px auto; padding:32px 48px 42px; background:#fff; border:1px solid #e0e5dc; border-radius:12px; }
+nav { display:flex; flex-wrap:wrap; gap:12px 22px; padding-bottom:16px; border-bottom:1px solid #e1e6df; font-size:14px; }
+h1 { font-size:1.8rem; line-height:1.45; margin:27px 0 20px; } h2 { font-size:1.3rem; margin:36px 0 16px; } h3 { font-size:1.1rem; }
+p,ul,ol,table { margin:15px 0; } li+li { margin-top:7px; } a { color:#246a50; text-underline-offset:3px; }
+blockquote { margin:22px 0; padding:5px 20px; background:#f1f6f0; border-left:3px solid #7c9f77; }
+details { border:1px solid #d8e0d4; border-radius:8px; margin:16px 0 24px; padding:0 18px; background:#fcfdfb; } summary { cursor:pointer; padding:13px 0; color:#315b41; font-weight:600; } details[open] { padding-bottom:12px; }
+table { border-collapse:collapse; width:100%; font-size:.96em; display:block; overflow-x:auto; } th,td { border:1px solid #dce3d8; padding:10px 13px; text-align:left; vertical-align:top; } th { background:#f2f5ef; }
+math { font-family:math; font-size:1.04em; } .math-display { overflow-x:auto; padding:8px 2px; margin:20px 0; } .math-display math { margin:0 auto; }
+code { overflow-wrap:anywhere; } pre { overflow:auto; } img,svg { max-width:100%; height:auto; } .source-label,footer { color:#66736b; font-size:14px; } footer { margin-top:36px; padding-top:15px; border-top:1px solid #e1e6df; }
+@media(max-width:620px) { body { font-size:16px; } .sheet { width:calc(100% - 16px); margin:8px auto; padding:20px 18px 28px; } h1 { font-size:1.5rem; } th,td { padding:8px; } }
+</style><link rel="stylesheet" href="runtime/app.css"></head><body><main class="sheet"><header class="brand-bar"><span class="brand-mark" aria-hidden="true">β</span><span class="brand-name">回归分析学习室</span><span class="brand-sub">LEARN · REASON · PRACTICE</span></header><nav aria-label="课程导航"><a href="index.html">继续学习</a><a href="index.html?view=exercises">材料习题</a><a href="index.html?view=progress">目录与进度</a></nav><p id="save-status" role="status"></p><div id="runtime-error" class="runtime-error" role="alert" hidden></div><div id="app-view"><article id="lesson-content" data-module-id="C2M112"><h1 id="按原例-2.8-完成左侧检验">按原例 2.8 完成左侧检验</h1>
+<p>来源：Chapter 2: Classical Linear Regression Models，PDF 第 28 页，例
+2.8；29–31。目标：保留 Cobb–Douglas 原例的单侧备择，正确选择尾部和 p
+值。</p>
+<h2 id="method">定义、条件与方法</h2>
+<p>上一课是双侧规则，原例 2.8
+则明确只关心规模报酬递减。本步保留这个方向，不能机械套用双侧拒绝法。</p>
+<p><strong>原例完整题意。</strong> 对
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>=</mo><mi>A</mi><msup><mi>K</mi><msub><mi>β</mi><mn>2</mn></msub></msup><msup><mi>L</mi><msub><mi>β</mi><mn>3</mn></msub></msup></mrow><annotation encoding="application/x-tex">Y=AK^{\beta_2}L^{\beta_3}</annotation></semantics></math></span>，检验
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><msub><mi>β</mi><mn>2</mn></msub><mo>+</mo><msub><mi>β</mi><mn>3</mn></msub><mo>=</mo><mn>1</mn><mspace width="1.0em"></mspace><mtext mathvariant="normal">对</mtext><mspace width="1.0em"></mspace><msub><mi>H</mi><mn>1</mn></msub><mo>:</mo><msub><mi>β</mi><mn>2</mn></msub><mo>+</mo><msub><mi>β</mi><mn>3</mn></msub><mo>&lt;</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+H_0:\beta_2+\beta_3=1
+\quad\text{对}\quad
+H_1:\beta_2+\beta_3&lt;1.
+</annotation></semantics></math></div> 在对数回归满足 A.1、A.3、A.5，且
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>&gt;</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">n&gt;k</annotation></semantics></math></span>
+时，
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>n</mi></msub><mo>=</mo><mfrac><mrow><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>2</mn></msub><mo>+</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>3</mn></msub><mo>−</mo><mn>1</mn></mrow><mrow><mi>s</mi><msqrt><mrow><msub><mi>Q</mi><mn>22</mn></msub><mo>+</mo><msub><mi>Q</mi><mn>33</mn></msub><mo>+</mo><mn>2</mn><msub><mi>Q</mi><mn>23</mn></msub></mrow></msqrt></mrow></mfrac><mo>∼</mo><mi>t</mi><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo><mspace width="1.0em"></mspace><mo stretchy="false" form="prefix">(</mo><msub><mi>H</mi><mn>0</mn></msub><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+T_n=\frac{\widehat\beta_2+\widehat\beta_3-1}
+{s\sqrt{Q_{22}+Q_{33}+2Q_{23}}}
+\sim t(n-k)\quad(H_0).
+</annotation></semantics></math></div>
+原讲义只给出模型与假设，没有样本数值；下列数值示范为编辑补充。</p>
+<p><strong>左侧规则。</strong> 大的负值支持
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>1</mn></msub><annotation encoding="application/x-tex">H_1</annotation></semantics></math></span>。显著性水平
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span>
+的拒绝域是
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>n</mi></msub><mo>&lt;</mo><mi>−</mi><msub><mi>t</mi><mi>α</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+t_n&lt;-t_\alpha(n-k).
+</annotation></semantics></math></div> 左侧
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math></span>
+值为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">{</mo><mi>T</mi><mo>≤</mo><msub><mi>t</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\Pr\{T\le t_n\}</annotation></semantics></math></span>，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo>∼</mo><mi>t</mi><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">T\sim t(n-k)</annotation></semantics></math></span>。右侧备择的规则则是
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>n</mi></msub><mo>&gt;</mo><msub><mi>t</mi><mi>α</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">t_n&gt;t_\alpha(n-k)</annotation></semantics></math></span>，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo>≥</mo><msub><mi>t</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">p=\Pr(T\ge t_n)</annotation></semantics></math></span>。连续分布里严格或非严格尾概率相同。事先选择方向：看过估计符号后再临时改方向，会改变原定错误拒绝率。</p>
+<p><strong>单侧区间的对应关系。</strong> 左侧检验可看单侧上置信限
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mo>=</mo><msup><mi>c</mi><mo>′</mo></msup><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>+</mo><msub><mi>t</mi><mi>α</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>d</mi><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">se</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msup><mi>c</mi><mo>′</mo></msup><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+U=c&#39;\widehat\beta+t_\alpha(d)\operatorname{se}(c&#39;\widehat\beta).
+</annotation></semantics></math></div> 只有
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mo>&lt;</mo><mi>r</mi></mrow><annotation encoding="application/x-tex">U&lt;r</annotation></semantics></math></span>
+时拒绝
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><msup><mi>c</mi><mo>′</mo></msup><mi>β</mi><mo>=</mo><mi>r</mi></mrow><annotation encoding="application/x-tex">H_0:c&#39;\beta=r</annotation></semantics></math></span>，因为移项恰好得到
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>n</mi></msub><mo>&lt;</mo><mi>−</mi><msub><mi>t</mi><mi>α</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>d</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">t_n&lt;-t_\alpha(d)</annotation></semantics></math></span>。</p>
+<h2 id="example-a">例题 A</h2>
+<p>（补充数值）原例 2.8 中估计系数和为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.75</mn><annotation encoding="application/x-tex">0.75</annotation></semantics></math></span>，其标准误为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.10</mn><annotation encoding="application/x-tex">0.10</annotation></semantics></math></span>，自由度
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>20</mn><annotation encoding="application/x-tex">20</annotation></semantics></math></span>。给定
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mn>0.05</mn></msub><mo stretchy="false" form="prefix">(</mo><mn>20</mn><mo stretchy="false" form="postfix">)</mo><mo>≈</mo><mn>1.725</mn></mrow><annotation encoding="application/x-tex">t_{0.05}(20)\approx1.725</annotation></semantics></math></span>，作
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">5\%</annotation></semantics></math></span>
+左侧检验。</p>
+<h2 id="answer-a">A 解答</h2>
+<details>
+<summary>
+查看示范解答
+</summary>
+<p><span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>n</mi></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>0.75</mn><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>0.10</mn><mo>=</mo><mi>−</mi><mn>2.5</mn></mrow><annotation encoding="application/x-tex">t_n=(0.75-1)/0.10=-2.5</annotation></semantics></math></span>。因为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2.5</mn><mo>&lt;</mo><mi>−</mi><mn>1.725</mn></mrow><annotation encoding="application/x-tex">-2.5&lt;-1.725</annotation></semantics></math></span>，拒绝规模报酬不变的原假设，结果支持本题所选的递减方向。<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">{</mo><mi>t</mi><mo stretchy="false" form="prefix">(</mo><mn>20</mn><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mi>−</mi><mn>2.5</mn><mo stretchy="false" form="postfix">}</mo><mo>&lt;</mo><mn>0.05</mn></mrow><annotation encoding="application/x-tex">p=\Pr\{t(20)\le-2.5\}&lt;0.05</annotation></semantics></math></span>。上置信限为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.75</mn><mo>+</mo><mn>1.725</mn><mo stretchy="false" form="prefix">(</mo><mn>0.10</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.9225</mn><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0.75+1.725(0.10)=0.9225&lt;1</annotation></semantics></math></span>，与检验结论一致。</p>
+</details>
+<h2 id="practice-b">练习 B</h2><p class="source-label">新增练习 · 练习本课 A 已示范的同一判断、计算或证明动作。</p><p>（补充练习）仍检验同一个左侧备择。估计系数和变为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1.25</mn><annotation encoding="application/x-tex">1.25</annotation></semantics></math></span>，标准误仍为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.10</mn><annotation encoding="application/x-tex">0.10</annotation></semantics></math></span>，自由度仍为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>20</mn><annotation encoding="application/x-tex">20</annotation></semantics></math></span>。是否拒绝？能否用
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>T</mi><mi>n</mi><mn>2</mn></msubsup><mo>=</mo><mn>6.25</mn></mrow><annotation encoding="application/x-tex">T_n^2=6.25</annotation></semantics></math></span>
+的较大值支持递减？</p><div class="practice-controls" data-question-id="C2B112" data-module-id="C2M112" data-mode="guided" data-answer-anchor="answer-b"></div><h2 id="answer-b">B 解答</h2>
+<details>
+<summary>
+查看参考解
+</summary>
+<p><span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>n</mi></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1.25</mn><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>0.10</mn><mo>=</mo><mn>2.5</mn></mrow><annotation encoding="application/x-tex">t_n=(1.25-1)/0.10=2.5</annotation></semantics></math></span>，不在左侧拒绝域，因此不拒绝。左侧
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math></span>
+值为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">{</mo><mi>t</mi><mo stretchy="false" form="prefix">(</mo><mn>20</mn><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mn>2.5</mn><mo stretchy="false" form="postfix">}</mo><mo>&gt;</mo><mn>1</mn><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\Pr\{t(20)\le2.5\}&gt;1/2</annotation></semantics></math></span>。平方丢失方向，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>6.25</mn><annotation encoding="application/x-tex">6.25</annotation></semantics></math></span>
+可能反映与等式的双侧偏离，但不能据此支持“和小于
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math></span>”；原题要求保留单侧方向。</p>
+</details>
+<h2 id="summary">一句小结</h2>
+<p>单侧检验必须保留统计量符号；原例 2.8 的备择是小于，拒绝域在左尾。</p>
+</article></div><footer>网站版本 0.1.0 · 记录保存在当前浏览器。请固定使用同一地址与浏览器，并定期导出备份。</footer></main><script type="module" src="runtime/app.js"></script></body></html>

@@ -1,0 +1,100 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="application-version" content="0.1.0"><title>分清 RSS 除以 n 与除以 n−k · 回归分析 · 从直觉到推导</title><style>:root { color-scheme:light; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; color:#26342f; background:#f6f7f3; }
+* { box-sizing:border-box; } body { margin:0; font-size:17px; line-height:1.9; }
+.sheet { width:min(900px,calc(100% - 32px)); margin:30px auto; padding:32px 48px 42px; background:#fff; border:1px solid #e0e5dc; border-radius:12px; }
+nav { display:flex; flex-wrap:wrap; gap:12px 22px; padding-bottom:16px; border-bottom:1px solid #e1e6df; font-size:14px; }
+h1 { font-size:1.8rem; line-height:1.45; margin:27px 0 20px; } h2 { font-size:1.3rem; margin:36px 0 16px; } h3 { font-size:1.1rem; }
+p,ul,ol,table { margin:15px 0; } li+li { margin-top:7px; } a { color:#246a50; text-underline-offset:3px; }
+blockquote { margin:22px 0; padding:5px 20px; background:#f1f6f0; border-left:3px solid #7c9f77; }
+details { border:1px solid #d8e0d4; border-radius:8px; margin:16px 0 24px; padding:0 18px; background:#fcfdfb; } summary { cursor:pointer; padding:13px 0; color:#315b41; font-weight:600; } details[open] { padding-bottom:12px; }
+table { border-collapse:collapse; width:100%; font-size:.96em; display:block; overflow-x:auto; } th,td { border:1px solid #dce3d8; padding:10px 13px; text-align:left; vertical-align:top; } th { background:#f2f5ef; }
+math { font-family:math; font-size:1.04em; } .math-display { overflow-x:auto; padding:8px 2px; margin:20px 0; } .math-display math { margin:0 auto; }
+code { overflow-wrap:anywhere; } pre { overflow:auto; } img,svg { max-width:100%; height:auto; } .source-label,footer { color:#66736b; font-size:14px; } footer { margin-top:36px; padding-top:15px; border-top:1px solid #e1e6df; }
+@media(max-width:620px) { body { font-size:16px; } .sheet { width:calc(100% - 16px); margin:8px auto; padding:20px 18px 28px; } h1 { font-size:1.5rem; } th,td { padding:8px; } }
+</style><link rel="stylesheet" href="runtime/app.css"></head><body><main class="sheet"><header class="brand-bar"><span class="brand-mark" aria-hidden="true">β</span><span class="brand-name">回归分析学习室</span><span class="brand-sub">LEARN · REASON · PRACTICE</span></header><nav aria-label="课程导航"><a href="index.html">继续学习</a><a href="index.html?view=exercises">材料习题</a><a href="index.html?view=progress">目录与进度</a></nav><p id="save-status" role="status"></p><div id="runtime-error" class="runtime-error" role="alert" hidden></div><div id="app-view"><article id="lesson-content" data-module-id="C2M011"><h1 id="分清-rss-除以-n-与除以-nk">分清 RSS 除以 n 与除以 n−k</h1>
+<p>来源：Chapter 2: Classical Linear Regression Models，PDF 第 15–16、21
+页。目标：写出两种误差方差估计，并说明正态极大似然为什么给出 RSS/n。</p>
+<h2 id="method">讲解与方法</h2>
+<p>真误差不可见，只能用残差估计噪声尺度。本课先解释两种除数各从何而来，无偏性将在后面的迹计算中证明。</p>
+<p>在 A.2、A.4 下，迭代期望给出
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><msubsup><mi>ε</mi><mi>i</mi><mn>2</mn></msubsup><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">E(\varepsilon_i^2)=\sigma^2</annotation></semantics></math></span>。把真误差换成拟合残差得到插入式矩估计
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mn>2</mn></msup><mo>=</mo><mfrac><mrow><mi>R</mi><mi>S</mi><mi>S</mi></mrow><mi>n</mi></mfrac><mo>=</mo><mfrac><mrow><msup><mover><mi>ε</mi><mo accent="true">̂</mo></mover><mo>′</mo></msup><mover><mi>ε</mi><mo accent="true">̂</mo></mover></mrow><mi>n</mi></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\widehat\sigma^2=\frac{RSS}{n}=\frac{\widehat\varepsilon&#39;\widehat\varepsilon}{n}.</annotation></semantics></math></div>
+因为拟合已经减少了残差的可变方向，其有限样本期望并非
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math></span>。自由度修正为
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>s</mi><mn>2</mn></msup><mo>=</mo><mfrac><mrow><mi>R</mi><mi>S</mi><mi>S</mi></mrow><mrow><mi>n</mi><mo>−</mo><mi>k</mi></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mi>n</mi><mo>&gt;</mo><mi>k</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">s^2=\frac{RSS}{n-k},\qquad n&gt;k.</annotation></semantics></math></div>
+在 A.1–A.4 下，后文将证明
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>R</mi><mi>S</mi><mi>S</mi><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo><msup><mi>σ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">E(RSS\mid X)=(n-k)\sigma^2</annotation></semantics></math></span>，从而
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>s</mi><mn>2</mn></msup><annotation encoding="application/x-tex">s^2</annotation></semantics></math></span>
+无偏，而
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mn>2</mn></msup><annotation encoding="application/x-tex">\widehat\sigma^2</annotation></semantics></math></span>
+的条件期望为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo><msup><mi>σ</mi><mn>2</mn></msup><mi>/</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">(n-k)\sigma^2/n</annotation></semantics></math></span>。</p>
+<p><strong>为何极大似然也得到
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>S</mi><mi>S</mi><mi>/</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">RSS/n</annotation></semantics></math></span>？</strong>
+这是额外加入正态性后的联系，不是 OLS
+所需的前提。<strong>似然</strong>是把已经观察到的数据的联合密度，看成候选参数的函数；最大化它是在这些候选中找对当前数据赋予最高密度的参数。若给定
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math></span>
+后误差相互独立且各服从均值
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math></span>、方差
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">v&gt;0</annotation></semantics></math></span>
+的正态分布，每项观测的密度为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><msqrt><mrow><mn>2</mn><mi>π</mi><mi>v</mi></mrow></msqrt></mfrac><mrow><mi mathvariant="normal">exp</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">[</mo><mi>−</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>Y</mi><mi>i</mi></msub><mo>−</mo><msubsup><mi>X</mi><mi>i</mi><mo>′</mo></msubsup><mi>b</mi><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mi>v</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\frac{1}{\sqrt{2\pi v}}\exp[-(Y_i-X_i&#39;b)^2/(2v)]</annotation></semantics></math></span>。条件独立使联合密度等于各项乘积。自然对数严格递增，所以取对数不改变最大点，同时把乘积化为和；略去与
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>,</mo><mi>v</mi></mrow><annotation encoding="application/x-tex">b,v</annotation></semantics></math></span>
+无关的常数后得到
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ℓ</mi><mo stretchy="false" form="prefix">(</mo><mi>b</mi><mo>,</mo><mi>v</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>−</mi><mfrac><mi>n</mi><mn>2</mn></mfrac><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mi>v</mi><mo>−</mo><mfrac><mrow><mi>R</mi><mi>S</mi><mi>S</mi><mo stretchy="false" form="prefix">(</mo><mi>b</mi><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mn>2</mn><mi>v</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\ell(b,v)=-\frac n2\log v-\frac{RSS(b)}{2v}.</annotation></semantics></math></div>
+固定
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math></span>，最大化它等同最小化
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>S</mi><mi>S</mi><mo stretchy="false" form="prefix">(</mo><mi>b</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">RSS(b)</annotation></semantics></math></span>，所以系数的极大似然估计是
+OLS。代入最小的
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>S</mi><mi>S</mi></mrow><annotation encoding="application/x-tex">RSS</annotation></semantics></math></span>，再对
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math></span>
+求导。这里用到
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>d</mi><mrow><mi>d</mi><mi>v</mi></mrow></mfrac><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mi>v</mi><mo>=</mo><mn>1</mn><mi>/</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">\frac{d}{dv}\log v=1/v</annotation></semantics></math></span>、<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>d</mi><mrow><mi>d</mi><mi>v</mi></mrow></mfrac><msup><mi>v</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>=</mo><mi>−</mi><msup><mi>v</mi><mrow><mi>−</mi><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\frac{d}{dv}v^{-1}=-v^{-2}</annotation></semantics></math></span>，并把已经算出的
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>S</mi><mi>S</mi></mrow><annotation encoding="application/x-tex">RSS</annotation></semantics></math></span>
+视为常数：
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>ℓ</mi></mrow><mrow><mi>∂</mi><mi>v</mi></mrow></mfrac><mo>=</mo><mi>−</mi><mfrac><mi>n</mi><mrow><mn>2</mn><mi>v</mi></mrow></mfrac><mo>+</mo><mfrac><mrow><mi>R</mi><mi>S</mi><mi>S</mi></mrow><mrow><mn>2</mn><msup><mi>v</mi><mn>2</mn></msup></mrow></mfrac><mo>=</mo><mn>0</mn><mspace width="1.0em"></mspace><mo>⇒</mo><mspace width="1.0em"></mspace><mover><mi>v</mi><mo accent="true">̂</mo></mover><mo>=</mo><mfrac><mrow><mi>R</mi><mi>S</mi><mi>S</mi></mrow><mi>n</mi></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial\ell}{\partial v}=-\frac{n}{2v}+\frac{RSS}{2v^2}=0\quad\Longrightarrow\quad\widehat v=\frac{RSS}{n}.</annotation></semantics></math></div>
+当
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>S</mi><mi>S</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">RSS&gt;0</annotation></semantics></math></span>，导数在该值前正、之后负，故是最大值。若
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>S</mi><mi>S</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">RSS=0</annotation></semantics></math></span>，似然会随
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo>↓</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">v\downarrow0</annotation></semantics></math></span>
+无界增加，在约束
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">v&gt;0</annotation></semantics></math></span>
+内没有有限最大点。常规连续正态模型且
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>&gt;</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">n&gt;k</annotation></semantics></math></span>
+时，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>S</mi><mi>S</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">RSS=0</annotation></semantics></math></span>
+的概率为零，但读公式时仍须注意边界。</p>
+<h2 id="example-a">例题 A：编辑铺垫</h2>
+<p>样本
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>8</mn></mrow><annotation encoding="application/x-tex">n=8</annotation></semantics></math></span>，参数
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">k=2</annotation></semantics></math></span>（已含截距），拟合后
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>S</mi><mi>S</mi><mo>=</mo><mn>18</mn></mrow><annotation encoding="application/x-tex">RSS=18</annotation></semantics></math></span>。计算
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mn>2</mn></msup><mo>,</mo><msup><mi>s</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\widehat\sigma^2,s^2</annotation></semantics></math></span>，并说明正态似然选择哪一个。</p>
+<h2 id="answer-a">A 解答</h2>
+<details>
+<summary>
+查看示范解答
+</summary>
+<p><div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mn>2</mn></msup><mo>=</mo><mn>18</mn><mi>/</mi><mn>8</mn><mo>=</mo><mn>2.25</mn><mo>,</mo><mspace width="2.0em"></mspace><msup><mi>s</mi><mn>2</mn></msup><mo>=</mo><mn>18</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>8</mn><mo>−</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>3</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\widehat\sigma^2=18/8=2.25,\qquad s^2=18/(8-2)=3.</annotation></semantics></math></div>
+正态似然对方差参数最大化给出
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>S</mi><mi>S</mi><mi>/</mi><mi>n</mi><mo>=</mo><mn>2.25</mn></mrow><annotation encoding="application/x-tex">RSS/n=2.25</annotation></semantics></math></span>。自由度修正值
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>3</mn><annotation encoding="application/x-tex">3</annotation></semantics></math></span>
+以无偏性为目标。最大化似然与有限样本无偏是不同准则，所以没有矛盾。</p>
+</details>
+<h2 id="practice-b">练习 B：补充练习</h2><p class="source-label">新增练习 · 沿用本课 A 已示范的同一方法，练习条件识别、计算或证明中的关键动作。</p><p>样本
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>12</mn><mo>,</mo><mi>k</mi><mo>=</mo><mn>3</mn><mo>,</mo><mi>R</mi><mi>S</mi><mi>S</mi><mo>=</mo><mn>27</mn></mrow><annotation encoding="application/x-tex">n=12,k=3,RSS=27</annotation></semantics></math></span>。计算两种方差估计。在
+A.1–A.4
+下，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>S</mi><mi>S</mi><mi>/</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">RSS/n</annotation></semantics></math></span>
+的条件期望是真方差的几倍？</p><div class="practice-controls" data-question-id="C2B011" data-module-id="C2M011" data-mode="guided" data-answer-anchor="answer-b"></div><h2 id="answer-b">B 解答</h2>
+<details>
+<summary>
+查看参考解
+</summary>
+<p><div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mn>2</mn></msup><mo>=</mo><mn>27</mn><mi>/</mi><mn>12</mn><mo>=</mo><mn>9</mn><mi>/</mi><mn>4</mn><mo>,</mo><mspace width="2.0em"></mspace><msup><mi>s</mi><mn>2</mn></msup><mo>=</mo><mn>27</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>12</mn><mo>−</mo><mn>3</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>3</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\widehat\sigma^2=27/12=9/4,\qquad s^2=27/(12-3)=3.</annotation></semantics></math></div>
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>R</mi><mi>S</mi><mi>S</mi><mi>/</mi><mi>n</mi><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mo stretchy="false" form="prefix">(</mo><mn>12</mn><mo>−</mo><mn>3</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>12</mn><mo stretchy="false" form="postfix">)</mo><msup><mi>σ</mi><mn>2</mn></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>3</mn><mi>/</mi><mn>4</mn><mo stretchy="false" form="postfix">)</mo><msup><mi>σ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">E(RSS/n\mid X)=((12-3)/12)\sigma^2=(3/4)\sigma^2</annotation></semantics></math></span>，即平均低估
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">1/4</annotation></semantics></math></span>。这个期望结论依赖后文证明的
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>R</mi><mi>S</mi><mi>S</mi><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo><msup><mi>σ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">E(RSS\mid X)=(n-k)\sigma^2</annotation></semantics></math></span>。</p>
+</details>
+<h2 id="summary">一句小结</h2>
+<p><span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>S</mi><mi>S</mi><mi>/</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">RSS/n</annotation></semantics></math></span>
+对应正态极大似然；<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>S</mi><mi>S</mi><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">RSS/(n-k)</annotation></semantics></math></span>
+在经典条件下修正估计系数造成的自由度损失。</p>
+</article></div><footer>网站版本 0.1.0 · 记录保存在当前浏览器。请固定使用同一地址与浏览器，并定期导出备份。</footer></main><script type="module" src="runtime/app.js"></script></body></html>

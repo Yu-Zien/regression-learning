@@ -1,0 +1,114 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="application-version" content="0.1.0"><title>通过白化推导 GLS 估计量 · 回归分析 · 从直觉到推导</title><style>:root { color-scheme:light; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; color:#26342f; background:#f6f7f3; }
+* { box-sizing:border-box; } body { margin:0; font-size:17px; line-height:1.9; }
+.sheet { width:min(900px,calc(100% - 32px)); margin:30px auto; padding:32px 48px 42px; background:#fff; border:1px solid #e0e5dc; border-radius:12px; }
+nav { display:flex; flex-wrap:wrap; gap:12px 22px; padding-bottom:16px; border-bottom:1px solid #e1e6df; font-size:14px; }
+h1 { font-size:1.8rem; line-height:1.45; margin:27px 0 20px; } h2 { font-size:1.3rem; margin:36px 0 16px; } h3 { font-size:1.1rem; }
+p,ul,ol,table { margin:15px 0; } li+li { margin-top:7px; } a { color:#246a50; text-underline-offset:3px; }
+blockquote { margin:22px 0; padding:5px 20px; background:#f1f6f0; border-left:3px solid #7c9f77; }
+details { border:1px solid #d8e0d4; border-radius:8px; margin:16px 0 24px; padding:0 18px; background:#fcfdfb; } summary { cursor:pointer; padding:13px 0; color:#315b41; font-weight:600; } details[open] { padding-bottom:12px; }
+table { border-collapse:collapse; width:100%; font-size:.96em; display:block; overflow-x:auto; } th,td { border:1px solid #dce3d8; padding:10px 13px; text-align:left; vertical-align:top; } th { background:#f2f5ef; }
+math { font-family:math; font-size:1.04em; } .math-display { overflow-x:auto; padding:8px 2px; margin:20px 0; } .math-display math { margin:0 auto; }
+code { overflow-wrap:anywhere; } pre { overflow:auto; } img,svg { max-width:100%; height:auto; } .source-label,footer { color:#66736b; font-size:14px; } footer { margin-top:36px; padding-top:15px; border-top:1px solid #e1e6df; }
+@media(max-width:620px) { body { font-size:16px; } .sheet { width:calc(100% - 16px); margin:8px auto; padding:20px 18px 28px; } h1 { font-size:1.5rem; } th,td { padding:8px; } }
+</style><link rel="stylesheet" href="runtime/app.css"></head><body><main class="sheet"><header class="brand-bar"><span class="brand-mark" aria-hidden="true">β</span><span class="brand-name">回归分析学习室</span><span class="brand-sub">LEARN · REASON · PRACTICE</span></header><nav aria-label="课程导航"><a href="index.html">继续学习</a><a href="index.html?view=exercises">材料习题</a><a href="index.html?view=progress">目录与进度</a></nav><p id="save-status" role="status"></p><div id="runtime-error" class="runtime-error" role="alert" hidden></div><div id="app-view"><article id="lesson-content" data-module-id="C2M122"><h1 id="通过白化推导-gls-估计量">通过白化推导 GLS 估计量</h1>
+<p>来源：Chapter 2: Classical Linear Regression Models，PDF 第 41
+页。目标：构造把一般协方差化为单位阵的变换，并从变换模型的 OLS 推导
+GLS。</p>
+<h2 id="method">定义、条件与方法</h2>
+<p>上一课发现 OLS
+等权处理一般不再最有效。本步利用已知的协方差形状调整整个模型，而不是只改动因变量。</p>
+<p><strong>白化变换。</strong>
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>V</mi><annotation encoding="application/x-tex">V</annotation></semantics></math></span>
+正定，可取可逆矩阵
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>C</mi><annotation encoding="application/x-tex">C</annotation></semantics></math></span>
+满足
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>=</mo><msup><mi>C</mi><mo>′</mo></msup><mi>C</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+V^{-1}=C&#39;C.
+</annotation></semantics></math></div> 例如使用前面解释的对称平方根，取
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>=</mo><msup><mi>V</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">C=V^{-1/2}</annotation></semantics></math></span>。一般满足该式的
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>C</mi><annotation encoding="application/x-tex">C</annotation></semantics></math></span>
+也有
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>=</mo><msup><mi>C</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo stretchy="false" form="prefix">(</mo><msup><mi>C</mi><mo>′</mo></msup><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>,</mo><mspace width="2.0em"></mspace><mi>C</mi><mi>V</mi><msup><mi>C</mi><mo>′</mo></msup><mo>=</mo><msub><mi>I</mi><mi>n</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">
+V=C^{-1}(C&#39;)^{-1},\qquad CVC&#39;=I_n.
+</annotation></semantics></math></div> 因此同时左乘模型：
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Y</mi><mo>*</mo></msup><mo>=</mo><mi>C</mi><mi>Y</mi><mo>,</mo><mspace width="2.0em"></mspace><msup><mi>X</mi><mo>*</mo></msup><mo>=</mo><mi>C</mi><mi>X</mi><mo>,</mo><mspace width="2.0em"></mspace><msup><mi>ε</mi><mo>*</mo></msup><mo>=</mo><mi>C</mi><mi>ε</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">
+Y^*=CY,\qquad X^*=CX,\qquad\varepsilon^*=C\varepsilon,
+</annotation></semantics></math></div>
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Y</mi><mo>*</mo></msup><mo>=</mo><msup><mi>X</mi><mo>*</mo></msup><mi>β</mi><mo>+</mo><msup><mi>ε</mi><mo>*</mo></msup><mo>,</mo><mspace width="2.0em"></mspace><msup><mi>ε</mi><mo>*</mo></msup><mo>∣</mo><mi>X</mi><mo>∼</mo><mi>N</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><msup><mi>σ</mi><mn>2</mn></msup><msub><mi>I</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+Y^*=X^*\beta+\varepsilon^*,\qquad
+\varepsilon^*\mid X\sim N(0,\sigma^2I_n).
+</annotation></semantics></math></div> 给定原始
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math></span>
+时，已知
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">V(X)</annotation></semantics></math></span>
+与
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">C(X)</annotation></semantics></math></span>
+都固定。<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>C</mi><annotation encoding="application/x-tex">C</annotation></semantics></math></span>
+可逆保证
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">rank</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>*</mo></msup><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mi mathvariant="normal">rank</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">\operatorname{rank}(X^*)=\operatorname{rank}(X)=k</annotation></semantics></math></span>，所以可以对变换模型做
+OLS。</p>
+<p><strong>推导。</strong>
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mrow><mi mathvariant="normal">G</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">S</mi></mrow></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><msup><mo>*</mo><mo>′</mo></msup></msup><msup><mi>X</mi><mo>*</mo></msup><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi>X</mi><msup><mo>*</mo><mo>′</mo></msup></msup><msup><mi>Y</mi><mo>*</mo></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><msup><mi>C</mi><mo>′</mo></msup><mi>C</mi><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi>X</mi><mo>′</mo></msup><msup><mi>C</mi><mo>′</mo></msup><mi>C</mi><mi>Y</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mo>′</mo></msup><msup><mi>V</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi>X</mi><mo>′</mo></msup><msup><mi>V</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>Y</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\widehat\beta_{\mathrm{GLS}}
+=(X^{*&#39;}X^*)^{-1}X^{*&#39;}Y^*
+=(X&#39;C&#39;CX)^{-1}X&#39;C&#39;CY
+=(X&#39;V^{-1}X)^{-1}X&#39;V^{-1}Y.
+</annotation></semantics></math></div> 等价地，它最小化
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo>−</mo><mi>X</mi><mi>b</mi><msup><mo stretchy="false" form="postfix">)</mo><mo>′</mo></msup><msup><mi>V</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo>−</mo><mi>X</mi><mi>b</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+(Y-Xb)&#39;V^{-1}(Y-Xb).
+</annotation></semantics></math></div>
+不同的合法白化矩阵给出相同的最终公式，因为公式只依赖
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>C</mi><mo>′</mo></msup><mi>C</mi><mo>=</mo><msup><mi>V</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">C&#39;C=V^{-1}</annotation></semantics></math></span>。</p>
+<p><strong>对角情形。</strong> 若
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>=</mo><mrow><mi mathvariant="normal">diag</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>v</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">V=\operatorname{diag}(v_i)</annotation></semantics></math></span>，取
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>=</mo><mrow><mi mathvariant="normal">diag</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><msqrt><msub><mi>v</mi><mi>i</mi></msub></msqrt><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">C=\operatorname{diag}(1/\sqrt{v_i})</annotation></semantics></math></span>，每一行的因变量和所有解释变量都除以
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msqrt><msub><mi>v</mi><mi>i</mi></msub></msqrt><annotation encoding="application/x-tex">\sqrt{v_i}</annotation></semantics></math></span>。这就是按逆方差权重的加权最小二乘。截距列也必须变为
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><msqrt><msub><mi>v</mi><mi>i</mi></msub></msqrt></mrow><annotation encoding="application/x-tex">1/\sqrt{v_i}</annotation></semantics></math></span>；不能在已经变换的回归里又不加说明地放回全
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math></span>
+截距。若
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>V</mi><annotation encoding="application/x-tex">V</annotation></semantics></math></span>
+含相关项，白化还会混合观测，不只是逐行赋权。</p>
+<h2 id="example-a">例题 A</h2>
+<p>截距模型
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mi>i</mi></msub><mo>=</mo><mi>β</mi><mo>+</mo><msub><mi>ε</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">Y_i=\beta+\varepsilon_i</annotation></semantics></math></span>
+有两个观测
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo>,</mo><mn>8</mn><msup><mo stretchy="false" form="postfix">)</mo><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">Y=(2,8)&#39;</annotation></semantics></math></span>，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>=</mo><mrow><mi mathvariant="normal">diag</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>4</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">V=\operatorname{diag}(1,4)</annotation></semantics></math></span>。求
+GLS，并写出变换后的因变量与设计列。</p>
+<h2 id="answer-a">A 解答</h2>
+<details>
+<summary>
+查看示范解答
+</summary>
+<p>取
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>=</mo><mrow><mi mathvariant="normal">diag</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">C=\operatorname{diag}(1,1/2)</annotation></semantics></math></span>，则
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Y</mi><mo>*</mo></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo>,</mo><mn>4</mn><msup><mo stretchy="false" form="postfix">)</mo><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">Y^*=(2,4)&#39;</annotation></semantics></math></span>、<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mo>*</mo></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>2</mn><msup><mo stretchy="false" form="postfix">)</mo><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">X^*=(1,1/2)&#39;</annotation></semantics></math></span>。因此
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mrow><mi mathvariant="normal">G</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">S</mi></mrow></msub><mo>=</mo><mfrac><mrow><mn>1</mn><mo>⋅</mo><mn>2</mn><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>⋅</mo><mn>4</mn></mrow><mrow><msup><mn>1</mn><mn>2</mn></msup><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>2</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow></mfrac><mo>=</mo><mfrac><mn>4</mn><mn>1.25</mn></mfrac><mo>=</mo><mn>3.2</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\widehat\beta_{\mathrm{GLS}}
+=\frac{1\cdot2+(1/2)\cdot4}{1^2+(1/2)^2}
+=\frac4{1.25}=3.2.
+</annotation></semantics></math></div> 等价地是
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo>+</mo><mn>8</mn><mi>/</mi><mn>4</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><mn>1</mn><mi>/</mi><mn>4</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(2+8/4)/(1+1/4)</annotation></semantics></math></span>。噪声方差为四倍的第二个观测得到四分之一权重，而不是一半；一半是变换的缩放比例，平方后才成为目标函数权重。</p>
+</details>
+<h2 id="practice-b">练习 B</h2><p class="source-label">新增练习 · 练习本课 A 已示范的同一判断、计算或证明动作。</p><p>（补充练习）同样的截距模型，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>4</mn><mo>,</mo><mn>10</mn><msup><mo stretchy="false" form="postfix">)</mo><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">Y=(4,10)&#39;</annotation></semantics></math></span>，<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>=</mo><mrow><mi mathvariant="normal">diag</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>9</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">V=\operatorname{diag}(1,9)</annotation></semantics></math></span>。写出
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>,</mo><msup><mi>Y</mi><mo>*</mo></msup><mo>,</mo><msup><mi>X</mi><mo>*</mo></msup></mrow><annotation encoding="application/x-tex">C,Y^*,X^*</annotation></semantics></math></span>
+并求 GLS。</p><div class="practice-controls" data-question-id="C2B122" data-module-id="C2M122" data-mode="guided" data-answer-anchor="answer-b"></div><h2 id="answer-b">B 解答</h2>
+<details>
+<summary>
+查看参考解
+</summary>
+<p><div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>=</mo><mrow><mi mathvariant="normal">diag</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>3</mn><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="1.0em"></mspace><msup><mi>Y</mi><mo>*</mo></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>4</mn><mo>,</mo><mn>10</mn><mi>/</mi><mn>3</mn><msup><mo stretchy="false" form="postfix">)</mo><mo>′</mo></msup><mo>,</mo><mspace width="1.0em"></mspace><msup><mi>X</mi><mo>*</mo></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>3</mn><msup><mo stretchy="false" form="postfix">)</mo><mo>′</mo></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">
+C=\operatorname{diag}(1,1/3),\quad
+Y^*=(4,10/3)&#39;,\quad X^*=(1,1/3)&#39;.
+</annotation></semantics></math></div>
+<div class="math-display"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mrow><mi mathvariant="normal">G</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">S</mi></mrow></msub><mo>=</mo><mfrac><mrow><mn>4</mn><mo>+</mo><mn>10</mn><mi>/</mi><mn>9</mn></mrow><mrow><mn>1</mn><mo>+</mo><mn>1</mn><mi>/</mi><mn>9</mn></mrow></mfrac><mo>=</mo><mfrac><mn>46</mn><mn>10</mn></mfrac><mo>=</mo><mn>4.6</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\widehat\beta_{\mathrm{GLS}}
+=\frac{4+10/9}{1+1/9}=\frac{46}{10}=4.6.
+</annotation></semantics></math></div> 第二个观测权重是第一观测的
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mn>9</mn></mrow><annotation encoding="application/x-tex">1/9</annotation></semantics></math></span>。若忘记变换截距列，直接求
+<span class="math-inline"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>Y</mi><mo>*</mo></msup><annotation encoding="application/x-tex">Y^*</annotation></semantics></math></span>
+的平均值，会得到错误的估计量。</p>
+</details>
+<h2 id="summary">一句小结</h2>
+<p>已知 V 先白化整个模型，再做 OLS；它等价于最小化按 V
+的逆加权的残差平方和。</p>
+</article></div><footer>网站版本 0.1.0 · 记录保存在当前浏览器。请固定使用同一地址与浏览器，并定期导出备份。</footer></main><script type="module" src="runtime/app.js"></script></body></html>
